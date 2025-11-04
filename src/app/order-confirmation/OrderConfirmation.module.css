@@ -1,6 +1,6 @@
 .confirmationPage {
   min-height: 100vh;
-  padding: 90px 0 40px;
+  padding: 5px 0 40px;
   background-color: var(--bg-light);
 }
 
@@ -459,7 +459,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .confirmationPage {
-    padding: 90px 0 30px;
+    padding: 5px 0 30px;
   }
 
   .confirmationCard {
@@ -527,7 +527,7 @@
 
 @media (max-width: 480px) {
   .confirmationPage {
-    padding: 85px 0 25px;
+    padding: 5px 0 25px;
   }
 
   .confirmationCard {

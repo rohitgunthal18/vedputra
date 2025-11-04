@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
+import Header from '@/components/Header/Header';
 import styles from './Checkout.module.css';
 import { fetchPincodeData, validateMobileNumber, validatePincode } from '@/utils/pincodeApi';
 import { ShippingAddress } from '@/types';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, getCartTotal, getCartCount } = useCart();
+  const { cart, getCartTotal, getCartCount, clearCart } = useCart();
   const [isLoadingPincode, setIsLoadingPincode] = useState(false);
   const [pincodeError, setpincodeError] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -30,6 +31,7 @@ export default function CheckoutPage() {
 
   const [errors, setErrors] = useState<Partial<Record<keyof ShippingAddress, string>>>({});
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{code: string; discount: number; type: string} | null>(null);
 
   useEffect(() => {
     if (cart.length === 0) {
@@ -37,9 +39,33 @@ export default function CheckoutPage() {
     }
   }, [cart, router]);
 
+  // Load persisted coupon
+  useEffect(() => {
+    const persistedCoupon = localStorage.getItem('vedputra_applied_coupon');
+    if (persistedCoupon) {
+      const couponData = JSON.parse(persistedCoupon);
+      setAppliedCoupon(couponData);
+    }
+  }, []);
+
+  // Load Cashfree script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
   const subtotal = getCartTotal();
   const shipping = subtotal >= 999 ? 0 : 50;
-  const total = subtotal + shipping;
+  const discount = appliedCoupon ? appliedCoupon.discount : 0;
+  const total = subtotal + shipping - discount;
 
   const handlePincodeChange = async (pincode: string) => {
     setFormData({ ...formData, pincode, city: '', state: '' });
@@ -83,7 +109,7 @@ export default function CheckoutPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
+  const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) return;
@@ -93,33 +119,216 @@ export default function CheckoutPage() {
     }
 
     setIsProcessing(true);
-    const orderId = 'VED' + Date.now().toString().slice(-8);
 
-    const orderData = {
-      orderId,
-      items: cart,
-      shippingAddress: formData,
-      orderSummary: { subtotal, shipping, discount: 0, total },
-      paymentMethod,
-      orderDate: new Date().toISOString(),
-      status: 'pending',
-    };
+    try {
+      // For COD orders, use secure server-side validation
+      if (paymentMethod === 'cod') {
+        console.log('🔒 Creating SECURE COD order with server-side validation');
+        
+        // Send cart items for server-side validation (same as online payment)
+        const requestBody = {
+          items: cart.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+          shippingAddress: formData,
+          couponCode: appliedCoupon?.code,
+        };
 
-    localStorage.setItem('vedputra_last_order', JSON.stringify(orderData));
+        const response = await fetch('/api/order/create-cod', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
 
-    setTimeout(() => {
-      router.push(`/order-confirmation?orderId=${orderId}`);
-    }, 1000);
+        if (!response.ok) {
+          const errorData = await response.json();
+          alert(errorData.error || 'Failed to place order. Please try again.');
+          setIsProcessing(false);
+          return;
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+          console.log('✅ COD order created:', result.order.order_id);
+          console.log('📦 Full API response:', result);
+          
+          try {
+            // Save complete order data to localStorage for immediate display
+            // (Database fetch as backup if localStorage is cleared)
+            const orderData = result.order.orderData || {
+              orderId: result.order.order_id,
+              orderDate: new Date().toISOString(),
+              status: 'confirmed',
+              paymentMethod: 'cod',
+              shippingAddress: formData,
+              orderSummary: {
+                subtotal: subtotal,
+                shipping: shipping,
+                discount: discount,
+                total: total,
+              },
+              items: cart.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                product: item.product,
+              })),
+              couponCode: appliedCoupon?.code,
+            };
+            
+            console.log('💾 Saving to localStorage:', orderData);
+            localStorage.setItem('vedputra_last_order', JSON.stringify(orderData));
+            console.log('✅ Saved to localStorage');
+            
+            // Clear applied coupon
+            localStorage.removeItem('vedputra_applied_coupon');
+            
+            // Clear cart
+            clearCart();
+            console.log('✅ Cart cleared');
+            
+            console.log('🔄 Redirecting to order confirmation...');
+            
+            // IMMEDIATE redirect to order confirmation page
+            const confirmationUrl = `/order-confirmation?orderId=${result.order.order_id}`;
+            console.log('🔗 Redirect URL:', confirmationUrl);
+            
+            // Use hard navigation for immediate, reliable redirect
+            window.location.href = confirmationUrl;
+            
+          } catch (error) {
+            console.error('❌ Error during post-order processing:', error);
+            alert('Order placed successfully but there was an error loading the confirmation page. Your order ID is: ' + result.order.order_id);
+            window.location.href = `/order-confirmation?orderId=${result.order.order_id}`;
+          }
+        } else {
+          alert(result.error || 'Failed to place order. Please try again.');
+          setIsProcessing(false);
+        }
+      } else {
+        // For online payment - Initialize Cashfree with server-side validation
+        await handleCashfreePayment();
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Failed to place order. Please try again.');
+      setIsProcessing(false);
+    }
+  };
+
+  // Handle Cashfree Payment - SECURE VERSION
+  const handleCashfreePayment = async () => {
+    try {
+      // Step 1: Create payment session on server with FULL CART VALIDATION
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+      const returnUrl = `${baseUrl}/payment-callback`;
+
+      // Send cart items for server-side validation
+      // Server will recalculate everything - prices, shipping, discounts
+      const requestBody = {
+        items: cart.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+        customerDetails: {
+          customerName: formData.fullName,
+          customerPhone: formData.mobile,
+          customerEmail: `${formData.mobile}@vedputra.com`, // Default email
+        },
+        shippingAddress: formData,
+        couponCode: appliedCoupon?.code,
+        returnUrl: returnUrl,
+      };
+
+      console.log('🔒 Calling SECURE payment API with cart items');
+
+      const createOrderResponse = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      console.log('Payment API response status:', createOrderResponse.status);
+      console.log('Payment API response ok:', createOrderResponse.ok);
+
+      if (!createOrderResponse.ok) {
+        const errorText = await createOrderResponse.text();
+        console.error('Payment API error response:', errorText);
+        throw new Error(`Payment API error: ${createOrderResponse.status} - ${errorText}`);
+      }
+
+      const createOrderResult = await createOrderResponse.json();
+      console.log('Payment API result:', createOrderResult);
+
+      if (!createOrderResult.success) {
+        alert(createOrderResult.error || 'Failed to initialize payment. Please try again.');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Step 2: Save minimal order data to localStorage for callback
+      // Note: Server has the validated data, this is just for order confirmation display
+      const minimalOrderData = {
+        orderId: createOrderResult.orderId,
+        serverAmount: createOrderResult.amount, // Use server-calculated amount
+      };
+      localStorage.setItem('vedputra_pending_order', JSON.stringify(minimalOrderData));
+
+      // Step 3: Wait for Cashfree SDK to load
+      if (!(window as any).Cashfree) {
+        alert('Payment gateway is loading. Please wait a moment and try again.');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Step 4: Initialize Cashfree Checkout
+      const cashfree = (window as any).Cashfree({
+        mode: process.env.NEXT_PUBLIC_CASHFREE_ENVIRONMENT === 'PRODUCTION' ? 'production' : 'sandbox',
+      });
+
+      // Step 5: Redirect to Cashfree payment page
+      cashfree.checkout({
+        paymentSessionId: createOrderResult.paymentSessionId,
+        redirectTarget: '_self', // Open in same window
+      });
+
+      // Note: setIsProcessing(false) is not called here because we're redirecting
+      // The payment callback page will handle the result
+
+    } catch (error: any) {
+      console.error('Cashfree initialization error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+      });
+      
+      let errorMessage = 'Failed to initialize payment gateway. Please try again.';
+      if (error.message) {
+        errorMessage = `Payment error: ${error.message}`;
+      }
+      
+      alert(errorMessage);
+      setIsProcessing(false);
+      localStorage.removeItem('vedputra_pending_order');
+    }
   };
 
   if (cart.length === 0) return null;
 
   return (
-    <div className={styles.checkoutPage}>
-      <div className="container">
-        <div className={styles.checkoutHeader}>
-          <h1>Checkout</h1>
-          <div className={styles.securityBadge}>
+    <>
+      <Header />
+      <div className={styles.checkoutPage}>
+        <div className="container">
+          <div className={styles.checkoutHeader}>
+            <h1>Checkout</h1>
+            <div className={styles.securityBadge}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -374,6 +583,13 @@ export default function CheckoutPage() {
                 <span>{shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`}</span>
               </div>
 
+              {discount > 0 && appliedCoupon && (
+                <div className={styles.summaryRow}>
+                  <span>Discount ({appliedCoupon.code})</span>
+                  <span style={{color: '#2e7d32'}}>-₹{discount.toFixed(2)}</span>
+                </div>
+              )}
+
               <div className={styles.summaryDivider}></div>
 
               <div className={styles.summaryTotal}>
@@ -387,5 +603,6 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

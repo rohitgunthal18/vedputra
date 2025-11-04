@@ -1,0 +1,244 @@
+.imageUpload {
+  width: 100%;
+}
+
+.imagesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* Image Preview */
+.imagePreview {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--bg-light);
+  overflow: hidden;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-cream);
+  color: var(--text-gray);
+  font-size: 14px;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.removeBtn:hover {
+  background: #C62828;
+  color: white;
+  transform: scale(1.1);
+}
+
+.primaryBadge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  padding: 4px 12px;
+  background: var(--primary-green);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  z-index: 10;
+}
+
+/* Upload Box */
+.uploadBox {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--bg-light);
+  border: 2px dashed var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.uploadBox:hover {
+  border-color: var(--primary-green);
+  background: rgba(74, 103, 65, 0.05);
+}
+
+.fileInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.uploadContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  pointer-events: none;
+}
+
+.uploadContent svg {
+  color: var(--primary-green);
+}
+
+.uploadText {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.uploadText small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-gray);
+  font-weight: 400;
+}
+
+/* Spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-light);
+  border-top-color: var(--primary-green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Upload Info */
+.uploadInfo {
+  padding: 16px;
+  background: var(--bg-light);
+  font-size: 14px;
+}
+
+.uploadInfo p {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.uploadInfo p:last-child {
+  margin-bottom: 0;
+}
+
+.required {
+  color: #C62828;
+  font-weight: 600;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--text-gray);
+  font-style: italic;
+}
+
+/* URL Input Container */
+.urlInputContainer {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bg-light);
+  border: 1px solid var(--border-medium);
+}
+
+.urlInput {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-medium);
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 12px;
+  transition: border-color var(--transition-fast);
+}
+
+.urlInput:focus {
+  outline: none;
+  border-color: var(--primary-green);
+}
+
+.urlButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.btnAdd,
+.btnCancel {
+  padding: 10px 24px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btnAdd {
+  background: var(--primary-green);
+  color: white;
+}
+
+.btnAdd:hover {
+  background: #3d5536;
+  transform: translateY(-1px);
+}
+
+.btnCancel {
+  background: var(--bg-cream);
+  color: var(--text-primary);
+}
+
+.btnCancel:hover {
+  background: var(--border-medium);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .imagesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .uploadText {
+    font-size: 12px;
+  }
+
+  .uploadContent svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+

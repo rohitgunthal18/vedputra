@@ -1,6 +1,6 @@
 .checkoutPage {
   min-height: 100vh;
-  padding: 90px 0 40px;
+  padding: 5px 0 40px;
   background-color: var(--bg-light);
 }
 
@@ -465,7 +465,7 @@
 
 @media (max-width: 768px) {
   .checkoutPage {
-    padding: 90px 0 30px;
+    padding: 5px 0 30px;
   }
 
   .checkoutHeader {
@@ -549,7 +549,7 @@
 
 @media (max-width: 480px) {
   .checkoutPage {
-    padding: 85px 0 25px;
+    padding: 5px 0 25px;
   }
 
   .checkoutHeader h1 {

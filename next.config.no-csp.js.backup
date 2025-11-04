@@ -1,0 +1,18 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**', // Allow all HTTPS images
+      },
+    ],
+  },
+  // CSP DISABLED FOR TESTING
+  // If contact form works without CSP, then we know CSP is the issue
+}
+
+module.exports = nextConfig
+

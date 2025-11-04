@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import styles from './Newsletter.module.css';
+import { createContactMessage } from '@/lib/api';
 
 const Newsletter = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const Newsletter = () => {
     email: '',
     phone: '',
     message: '',
+    honeypot: '', // Anti-spam field (hidden from users)
   });
   const [activeTab, setActiveTab] = useState<'info' | 'form'>('info');
 
@@ -19,10 +21,41 @@ const Newsletter = () => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert(`Thank you for contacting us, ${formData.name}! We'll get back to you soon.`);
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    
+    // Prevent double submission
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+
+    try {
+      const result = await createContactMessage({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+        honeypot: formData.honeypot,
+      });
+
+      if (result.success) {
+        alert(`Thank you for contacting us, ${formData.name}! We'll get back to you soon.`);
+        setFormData({ name: '', email: '', phone: '', message: '', honeypot: '' });
+      } else {
+        // Show specific error message from API
+        const errorMessage = typeof result.error === 'string' 
+          ? result.error 
+          : result.error?.message || 'Failed to send message. Please try again.';
+        alert(errorMessage);
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -66,6 +99,7 @@ const Newsletter = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
+                    suppressHydrationWarning
                   />
                 </div>
                 <div className={styles.formGroup}>
@@ -79,6 +113,7 @@ const Newsletter = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
@@ -94,6 +129,7 @@ const Newsletter = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   required
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -108,11 +144,31 @@ const Newsletter = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
+                  suppressHydrationWarning
                 />
               </div>
 
-              <button type="submit" className={styles.submitBtn}>
-                SEND MESSAGE
+              {/* Honeypot field - hidden from users, catches bots */}
+              <input
+                type="text"
+                name="honeypot"
+                value={formData.honeypot}
+                onChange={handleChange}
+                style={{ 
+                  position: 'absolute', 
+                  left: '-9999px',
+                  width: '1px',
+                  height: '1px',
+                  opacity: 0,
+                  pointerEvents: 'none'
+                }}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+              />
+
+              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+                {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
               </button>
             </form>
           </div>

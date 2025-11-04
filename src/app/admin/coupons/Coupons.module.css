@@ -1,0 +1,725 @@
+.couponsPage {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Page Header */
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.pageTitle {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.pageSubtitle {
+  color: var(--text-gray);
+  font-size: 15px;
+  margin: 0;
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.refreshBtn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Stats */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  background: white;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+.statValue {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary-green);
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-gray);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.filterBtn {
+  padding: 10px 20px;
+  background: white;
+  border: 1px solid var(--border-light);
+  color: var(--text-gray);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+
+.filterActive {
+  background: var(--primary-green);
+  border-color: var(--primary-green);
+  color: white;
+}
+
+.filterActive:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-light);
+  border-top-color: var(--primary-green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Coupons Grid */
+.couponsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.couponCard {
+  background: white;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  border-left: 4px solid var(--primary-green);
+}
+
+.couponCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.couponCard.expired {
+  border-left-color: #C62828;
+  opacity: 0.7;
+}
+
+.couponCard.urgent {
+  border-left-color: #EF6C00;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: var(--shadow-sm);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(239, 108, 0, 0.2), var(--shadow-md);
+  }
+}
+
+/* Coupon Header */
+.couponHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.couponCode {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.couponCode svg {
+  color: var(--primary-green);
+}
+
+/* Badges */
+.activeBadge,
+.usedBadge,
+.expiredBadge,
+.urgentBadge {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.activeBadge {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.usedBadge {
+  background: #E3F2FD;
+  color: #1976D2;
+}
+
+.expiredBadge {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.urgentBadge {
+  background: #FFF3E0;
+  color: #EF6C00;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Coupon Body */
+.couponBody {
+  padding: 20px 24px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+}
+
+.infoRow:last-of-type {
+  border-bottom: none;
+}
+
+.label {
+  color: var(--text-gray);
+  font-weight: 500;
+}
+
+.value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Remaining Time */
+.remainingTime {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid var(--border-light);
+}
+
+.timeBar {
+  height: 8px;
+  background: var(--primary-green);
+  margin-bottom: 8px;
+  transition: all var(--transition-normal);
+}
+
+.timeText {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.usedInfo {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg-light);
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-gray);
+}
+
+/* Coupon Actions */
+.couponActions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-light);
+}
+
+.whatsappBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: #25D366;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.whatsappBtn:hover {
+  background: #128C7E;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.urgent .whatsappBtn {
+  animation: wiggle 1s infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+/* Empty State */
+.emptyState {
+  background: white;
+  padding: 80px 40px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyState svg {
+  color: var(--text-gray);
+  margin-bottom: 24px;
+}
+
+.emptyState h3 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.emptyState p {
+  color: var(--text-gray);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .refreshBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .statsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .couponsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .statsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .statValue {
+    font-size: 28px;
+  }
+
+  .couponCode {
+    font-size: 16px;
+  }
+}
+
+/* Custom Coupons Section */
+.createCustomBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #7FA64A;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.createCustomBtn:hover {
+  background: #4A6741;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 103, 65, 0.3);
+}
+
+.customCouponsSection {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.customCouponsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.customCouponCard {
+  background: white;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.customCouponCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.customCouponCard.inactive {
+  opacity: 0.6;
+  background: #f5f5f5;
+}
+
+.discountInfo {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-green);
+  margin: 12px 0;
+}
+
+.description {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin: 8px 0;
+}
+
+.couponDetails {
+  font-size: 13px;
+  color: var(--text-gray);
+  margin: 12px 0;
+  line-height: 1.6;
+}
+
+.customCouponActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.toggleBtn {
+  flex: 1;
+  padding: 8px 16px;
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleBtn:hover {
+  background: #3D5536;
+}
+
+.deleteBtn {
+  padding: 8px 16px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background: #b71c1c;
+}
+
+.inactiveBadge {
+  background: #757575;
+  color: white;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.activeBadge {
+  background: #2e7d32;
+  color: white;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.expiredBadge {
+  background: #d32f2f;
+  color: white;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modalHeader h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-gray);
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+
+.modalForm {
+  padding: 24px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.1);
+}
+
+.formGroup textarea {
+  resize: vertical;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 24px;
+}
+
+.cancelBtn {
+  padding: 10px 24px;
+  background: #f5f5f5;
+  color: var(--text-primary);
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelBtn:hover {
+  background: #e0e0e0;
+}
+
+.saveBtn {
+  padding: 10px 24px;
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveBtn:hover {
+  background: #3D5536;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 103, 65, 0.3);
+}
+
+/* Responsive for Modal */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .modalHeader {
+    padding: 16px 20px;
+  }
+
+  .modalForm {
+    padding: 20px;
+  }
+}
+

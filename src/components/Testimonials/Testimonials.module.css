@@ -17,7 +17,7 @@
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  border-radius: 50px;
+  border-radius: 0;
   margin-bottom: var(--spacing-md);
 }
 
@@ -42,7 +42,7 @@
 .testimonialCard {
   background-color: var(--bg-cream);
   padding: var(--spacing-xl);
-  border-radius: 12px;
+  border-radius: 0;
   transition: all var(--transition-normal);
 }
 

@@ -1,6 +1,6 @@
 .cartPage {
   min-height: 100vh;
-  padding: 100px 0 60px;
+  padding: 5px 0 60px;
   background-color: var(--bg-light);
 }
 
@@ -365,7 +365,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 120px 0 80px;
+  padding: 5px 0 80px;
 }
 
 .emptyCartContent {
@@ -442,7 +442,7 @@
 
 @media (max-width: 480px) {
   .cartPage {
-    padding: 90px 0 40px;
+    padding: 5px 0 40px;
   }
 
   .cartHeader {

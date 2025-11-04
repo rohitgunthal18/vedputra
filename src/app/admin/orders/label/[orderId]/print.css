@@ -1,0 +1,23 @@
+/* Global Print Styles for Shipping Label Page */
+@media print {
+  /* Reset body for clean printing */
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure colors print */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  /* Page settings */
+  @page {
+    size: A5 landscape;
+    margin: 0;
+  }
+}
+

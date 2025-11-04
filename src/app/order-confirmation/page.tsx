@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
+import Header from '@/components/Header/Header';
 import styles from './OrderConfirmation.module.css';
 import { Order } from '@/types';
 
@@ -17,26 +18,99 @@ function OrderConfirmationContent() {
 
   useEffect(() => {
     const orderId = searchParams.get('orderId');
+    console.log('🔍 Order confirmation page loaded with orderId:', orderId);
     
     if (!orderId) {
+      console.error('❌ No orderId found in URL');
       router.push('/');
       return;
     }
 
-    const orderData = localStorage.getItem('vedputra_last_order');
-    
-    if (orderData) {
-      const parsedOrder = JSON.parse(orderData);
-      if (parsedOrder.orderId === orderId) {
-        setOrder(parsedOrder);
-        clearCart();
-      } else {
+    // Try localStorage first for instant display, then fallback to database
+    const loadOrder = async () => {
+      try {
+        // First, try localStorage for instant display
+        const localData = localStorage.getItem('vedputra_last_order');
+        console.log('📦 localStorage data:', localData);
+        
+        if (localData) {
+          const parsed = JSON.parse(localData);
+          console.log('📋 Parsed order data:', parsed);
+          
+          if (parsed.orderId === orderId) {
+            console.log('✅ Order loaded from localStorage');
+            setOrder(parsed);
+            clearCart();
+            return; // Success! No need to fetch from database
+          } else {
+            console.warn('⚠️ Order ID mismatch:', { localStorage: parsed.orderId, url: orderId });
+          }
+        } else {
+          console.log('ℹ️ No localStorage data found');
+        }
+        
+        // If localStorage fails, fetch from database
+        console.log('📦 Fetching order details from database:', orderId);
+        
+        const { getOrderByOrderId } = await import('@/lib/api');
+        const result = await getOrderByOrderId(orderId);
+        
+        if (result.success && result.order) {
+          console.log('✅ Order fetched from database');
+          
+          // Transform database order to match component format
+          const transformedOrder: any = {
+            orderId: result.order.order_id,
+            orderDate: result.order.created_at,
+            status: result.order.order_status,
+            paymentMethod: result.order.payment_method,
+            shippingAddress: {
+              fullName: result.order.customer_name,
+              mobile: result.order.customer_mobile,
+              address: result.order.shipping_address,
+              locality: result.order.shipping_locality || '',
+              city: result.order.shipping_city,
+              state: result.order.shipping_state,
+              pincode: result.order.shipping_pincode,
+              addressType: result.order.address_type || 'home',
+              whatsappUpdates: result.order.whatsapp_updates || false,
+            },
+            orderSummary: {
+              subtotal: parseFloat(result.order.subtotal),
+              shipping: parseFloat(result.order.shipping_charge || '0'),
+              discount: parseFloat(result.order.discount || '0'),
+              total: parseFloat(result.order.total_amount),
+            },
+            items: result.order.order_items?.map((item: any) => ({
+              productId: item.product_id,
+              quantity: item.quantity,
+              product: {
+                name: item.product_name,
+                price: parseFloat(item.unit_price),
+                weight: item.product_weight || '',
+                image: item.product_image || '/placeholder-product.svg',
+                description: item.product_description || '',
+              },
+            })) || [],
+            couponCode: result.order.coupon_code,
+            paymentId: result.order.payment_transaction_id,
+          };
+          
+          setOrder(transformedOrder);
+          clearCart();
+        } else {
+          console.error('❌ Order not found in database');
+          router.push('/');
+        }
+      } catch (error) {
+        console.error('❌ Error loading order:', error);
         router.push('/');
       }
-    } else {
-      router.push('/');
-    }
-  }, [searchParams, router, clearCart]);
+    };
+
+    loadOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const copyOrderId = () => {
     if (order) {
@@ -48,9 +122,12 @@ function OrderConfirmationContent() {
 
   if (!order) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.spinner}></div>
-      </div>
+      <>
+        <Header />
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner}></div>
+        </div>
+      </>
     );
   }
 
@@ -58,9 +135,11 @@ function OrderConfirmationContent() {
   const barcodeUrl = `https://barcode.tec-it.com/barcode.ashx?data=${order.orderId}&code=Code128&translate-esc=on&dpi=96&imagetype=Gif&rotation=0&color=%23000000&bgcolor=%23ffffff&qunit=Mm&quiet=0`;
 
   return (
-    <div className={styles.confirmationPage}>
-      <div className="container">
-        <div className={styles.confirmationCard}>
+    <>
+      <Header />
+      <div className={styles.confirmationPage}>
+        <div className="container">
+          <div className={styles.confirmationCard}>
           {/* Success Header */}
           <div className={styles.successHeader}>
             <div className={styles.successIcon}>
@@ -178,7 +257,7 @@ function OrderConfirmationContent() {
               </div>
               {order.orderSummary.discount > 0 && (
                 <div className={styles.summaryRow}>
-                  <span>Discount</span>
+                  <span>Discount {(order as any).couponCode ? `(${(order as any).couponCode})` : ''}</span>
                   <span style={{color: '#2e7d32'}}>-₹{order.orderSummary.discount.toFixed(2)}</span>
                 </div>
               )}
@@ -204,15 +283,19 @@ function OrderConfirmationContent() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
 export default function OrderConfirmationPage() {
   return (
     <Suspense fallback={
-      <div className={styles.loadingContainer}>
-        <div className={styles.spinner}></div>
-      </div>
+      <>
+        <Header />
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner}></div>
+        </div>
+      </>
     }>
       <OrderConfirmationContent />
     </Suspense>

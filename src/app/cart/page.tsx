@@ -1,50 +1,98 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
 import Image from 'next/image';
+import Header from '@/components/Header/Header';
 import styles from './Cart.module.css';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, getCartTotal, getCartCount } = useCart();
   const [couponCode, setCouponCode] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState<{code: string; discount: number} | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{code: string; discount: number; type: string} | null>(null);
+  const [isValidating, setIsValidating] = useState(false);
 
   const subtotal = getCartTotal();
   const shipping = subtotal > 0 ? (subtotal >= 999 ? 0 : 50) : 0;
   const discount = appliedCoupon ? appliedCoupon.discount : 0;
   const total = subtotal + shipping - discount;
 
-  const handleApplyCoupon = () => {
-    const code = couponCode.trim().toUpperCase();
-    // Simple coupon validation (you can expand this)
-    const coupons: Record<string, number> = {
-      'WELCOME10': subtotal * 0.1,
-      'SAVE50': 50,
-      'ORGANIC15': subtotal * 0.15,
-    };
-
-    if (coupons[code]) {
-      setAppliedCoupon({ code, discount: coupons[code] });
-      setCouponCode('');
-    } else {
-      alert('Invalid coupon code');
+  // Load persisted coupon on mount
+  useEffect(() => {
+    const persistedCoupon = localStorage.getItem('vedputra_applied_coupon');
+    if (persistedCoupon) {
+      const couponData = JSON.parse(persistedCoupon);
+      setAppliedCoupon(couponData);
     }
+  }, []);
+
+  // Auto-apply coupon from promotion page
+  useEffect(() => {
+    const autoApplyCoupon = localStorage.getItem('vedputra_auto_apply_coupon');
+    if (autoApplyCoupon && subtotal > 0 && !appliedCoupon) {
+      const code = autoApplyCoupon.toUpperCase();
+      handleApplyCouponWithValidation(code);
+      localStorage.removeItem('vedputra_auto_apply_coupon');
+    }
+  }, [subtotal, appliedCoupon]);
+
+  // Persist coupon whenever it changes
+  useEffect(() => {
+    if (appliedCoupon) {
+      localStorage.setItem('vedputra_applied_coupon', JSON.stringify(appliedCoupon));
+    } else {
+      localStorage.removeItem('vedputra_applied_coupon');
+    }
+  }, [appliedCoupon]);
+
+  const handleApplyCouponWithValidation = async (code: string) => {
+    if (!code.trim()) return;
+
+    setIsValidating(true);
+    
+    try {
+      // Import validateCoupon from api
+      const { validateCoupon } = await import('@/lib/api');
+      const result = await validateCoupon(code, subtotal);
+      
+      if (result.valid) {
+        setAppliedCoupon({ 
+          code: code.toUpperCase(), 
+          discount: result.discount || 0,
+          type: result.type || 'general',
+        });
+        setCouponCode('');
+      } else {
+        alert(result.message || 'Invalid coupon code');
+      }
+    } catch (error) {
+      console.error('Error validating coupon:', error);
+      alert('Error validating coupon. Please try again.');
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleApplyCoupon = () => {
+    handleApplyCouponWithValidation(couponCode.trim().toUpperCase());
   };
 
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponCode('');
+    localStorage.removeItem('vedputra_applied_coupon');
   };
 
   if (cart.length === 0) {
     return (
-      <div className={styles.emptyCart}>
-        <div className="container">
-          <div className={styles.emptyCartContent}>
-            <div className={styles.emptyCartIcon}>
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <>
+        <Header />
+        <div className={styles.emptyCart}>
+          <div className="container">
+            <div className={styles.emptyCartContent}>
+              <div className={styles.emptyCartIcon}>
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <circle cx="9" cy="21" r="1" />
                 <circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -58,11 +106,14 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+      </>
     );
   }
 
   return (
-    <div className={styles.cartPage}>
+    <>
+      <Header />
+      <div className={styles.cartPage}>
       <div className="container">
         <div className={styles.cartHeader}>
           <h1>Shopping Cart</h1>
@@ -161,13 +212,16 @@ export default function CartPage() {
                       placeholder="Coupon Code"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                      onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                      onKeyPress={(e) => e.key === 'Enter' && !isValidating && handleApplyCoupon()}
+                      disabled={isValidating}
                     />
-                    <button onClick={handleApplyCoupon}>Apply</button>
+                    <button onClick={handleApplyCoupon} disabled={isValidating}>
+                      {isValidating ? 'Validating...' : 'Apply'}
+                    </button>
                   </div>
                 ) : (
                   <div className={styles.couponApplied}>
-                    <span>🎉 {appliedCoupon.code} applied!</span>
+                    <span>🎉 {appliedCoupon.code} applied! Saved ₹{discount.toFixed(2)}</span>
                     <button onClick={handleRemoveCoupon}>Remove</button>
                   </div>
                 )}
@@ -208,6 +262,7 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

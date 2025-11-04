@@ -27,6 +27,13 @@
   letter-spacing: 2px;
   color: var(--text-dark);
   order: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.logo:hover {
+  color: var(--primary-green);
 }
 
 .navMenu {

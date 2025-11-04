@@ -1,0 +1,557 @@
+/* Overlay - Full Screen Backdrop */
+.promotionOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Compact Popup */
+.promotionPopup {
+  max-width: 380px;
+  width: 100%;
+  background: white;
+  border-radius: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+  padding: 24px 20px;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.popupHeader {
+  margin-bottom: 16px;
+}
+
+.giftIcon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.giftIcon svg {
+  color: white;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-gray);
+  margin: 0;
+}
+
+/* Offer Badge */
+.offerBadge {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 16px 24px;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+}
+
+.offerBadge::before,
+.offerBadge::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.75);
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+}
+
+.offerBadge::before {
+  left: -8px;
+}
+
+.offerBadge::after {
+  right: -8px;
+}
+
+.percentage {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.maxDiscount {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+/* Form */
+.claimForm {
+  margin-bottom: 14px;
+}
+
+.inputGroup {
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.inputWrapper {
+  display: flex;
+  border: 2px solid var(--border-light);
+  border-radius: 0;
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.1);
+}
+
+.countryCode {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: var(--bg-light);
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 14px;
+  border-right: 2px solid var(--border-light);
+}
+
+.inputWrapper input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-dark);
+  letter-spacing: 0.5px;
+}
+
+.inputWrapper input.invalid {
+  color: #dc2626;
+}
+
+.errorText {
+  display: block;
+  font-size: 11px;
+  color: #dc2626;
+  margin-top: 4px;
+}
+
+/* Claim Button */
+.claimBtn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-normal);
+}
+
+.claimBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(74, 103, 65, 0.3);
+}
+
+.claimBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Trust Note */
+.trustNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-gray);
+  padding: 10px;
+  background: var(--bg-light);
+}
+
+.trustNote svg {
+  flex-shrink: 0;
+  color: var(--primary-green);
+}
+
+/* Success State */
+.successIcon {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.successIcon svg {
+  color: white;
+  animation: checkmark 0.5s ease-in-out 0.2s both;
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.successIcon::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  opacity: 0.2;
+  animation: ripple 1.2s ease-out infinite;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.successTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+}
+
+.successSubtitle {
+  font-size: 13px;
+  color: var(--text-gray);
+  margin: 0 0 16px 0;
+}
+
+/* Coupon Box */
+.couponBox {
+  background: var(--bg-light);
+  border: 2px dashed var(--primary-green);
+  padding: 16px;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.couponBox::before,
+.couponBox::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  top: 50%;
+  transform: translateY(-50%);
+  border: 2px dashed var(--primary-green);
+  border-radius: 50%;
+}
+
+.couponBox::before {
+  left: -11px;
+  border-right: none;
+}
+
+.couponBox::after {
+  right: -11px;
+  border-left: none;
+}
+
+.couponLabel {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-gray);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.couponCode {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-green);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  font-family: 'Courier New', monospace;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: var(--bg-white);
+  border: 2px solid var(--border-medium);
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copyBtn:hover {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  background: var(--bg-light);
+}
+
+/* Offer Details */
+.offerDetails {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-gray);
+  margin-bottom: 14px;
+  padding: 10px;
+  background: var(--bg-light);
+}
+
+.offerDetails span:first-child,
+.offerDetails span:nth-child(3),
+.offerDetails span:nth-child(5) {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Shop Now Button */
+.shopNowBtn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-normal);
+  margin-bottom: 12px;
+}
+
+.shopNowBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(74, 103, 65, 0.3);
+}
+
+.shopNowBtn svg {
+  transition: transform var(--transition-fast);
+}
+
+.shopNowBtn:hover svg {
+  transform: translateX(3px);
+}
+
+/* WhatsApp Note */
+.whatsappNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 1px solid #86efac;
+}
+
+.whatsappNote svg {
+  flex-shrink: 0;
+  color: #16a34a;
+}
+
+.whatsappNote span {
+  font-size: 10px;
+  color: #15803d;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Responsive - Mobile Optimization */
+@media (max-width: 480px) {
+  .promotionOverlay {
+    padding: 12px;
+  }
+
+  .promotionPopup {
+    max-width: 100%;
+    padding: 20px 16px;
+  }
+
+  .giftIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .giftIcon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .title {
+    font-size: 21px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .percentage {
+    font-size: 26px;
+  }
+
+  .successIcon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .successIcon svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .successTitle {
+    font-size: 20px;
+  }
+
+  .couponCode {
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  .offerBadge {
+    padding: 14px 20px;
+  }
+
+  .offerDetails {
+    font-size: 10px;
+    gap: 6px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .promotionPopup {
+    padding: 18px 14px;
+  }
+
+  .title {
+    font-size: 19px;
+  }
+
+  .couponCode {
+    font-size: 18px;
+  }
+
+  .offerBadge {
+    padding: 12px 16px;
+  }
+}
+
+/* Prevent Body Scroll When Popup is Open */
+body:has(.promotionOverlay) {
+  overflow: hidden;
+}

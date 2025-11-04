@@ -113,7 +113,7 @@
   height: 480px;
   overflow: hidden;
   position: relative;
-  border-radius: 12px;
+  border-radius: 0;
 }
 
 .sliderTrack {
@@ -170,7 +170,7 @@
 .indicatorActive {
   background-color: var(--primary-green);
   width: 24px;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 /* ==================== FEATURES SECTION - MINIMALIST ==================== */

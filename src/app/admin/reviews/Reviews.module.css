@@ -1,0 +1,696 @@
+/* ============================================
+   ADMIN REVIEWS - WEBSITE THEME MATCH
+   ============================================ */
+
+.container {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid rgba(74, 103, 65, 0.08);
+}
+
+.header h1 {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: var(--text-gray);
+  margin: 8px 0 0 0;
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.statCard {
+  background: white;
+  padding: 28px;
+  border-radius: 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.statCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: rgba(74, 103, 65, 0.2);
+}
+
+.statValue {
+  font-family: var(--font-heading);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--primary-green);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: var(--text-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--font-primary);
+}
+
+/* ============================================
+   FILTERS
+   ============================================ */
+
+.filters {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.filterGroup label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.select {
+  padding: 12px 16px;
+  border: 1px solid var(--border-medium);
+  border-radius: 0;
+  font-size: 14px;
+  font-family: var(--font-primary);
+  color: var(--text-dark);
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.1);
+}
+
+/* ============================================
+   REVIEWS LIST
+   ============================================ */
+
+.reviewsContainer {
+  margin-top: 32px;
+}
+
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.reviewCard {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reviewCard:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  border-color: rgba(74, 103, 65, 0.2);
+}
+
+/* Product Info in Review */
+.reviewProduct {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(74, 103, 65, 0.08);
+  margin-bottom: 20px;
+}
+
+.productImageSmall {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #FAFAF8 0%, #F5F3EF 100%);
+  border: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.reviewProduct h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px 0;
+  font-family: var(--font-primary);
+}
+
+.productId {
+  font-size: 12px;
+  color: var(--text-gray);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Review Content */
+.reviewContent {
+  margin-bottom: 20px;
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.reviewerInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.reviewerName {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.verifiedBadge {
+  font-size: 11px;
+  color: var(--primary-green);
+  font-weight: 600;
+  background: rgba(74, 103, 65, 0.1);
+  padding: 3px 8px;
+  border-radius: 0;
+  letter-spacing: 0.3px;
+}
+
+.stars {
+  font-size: 18px;
+  color: #F39C12;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.reviewDate {
+  font-size: 12px;
+  color: var(--text-gray);
+}
+
+.reviewStatus {
+  flex-shrink: 0;
+}
+
+.statusApproved {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(74, 103, 65, 0.1);
+  color: var(--primary-green);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 0;
+}
+
+.statusPending {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 152, 0, 0.1);
+  color: #FF9800;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 0;
+}
+
+.reviewTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px 0;
+  font-family: var(--font-primary);
+}
+
+.reviewText {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-gray);
+  margin: 0 0 12px 0;
+}
+
+.reviewImages {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.reviewImage {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 1px solid var(--border-light);
+}
+
+.reviewMeta {
+  display: flex;
+  gap: 20px;
+  font-size: 12px;
+  color: var(--text-gray);
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+/* Review Actions */
+.reviewActions {
+  display: flex;
+  gap: 12px;
+  border-top: 2px solid rgba(74, 103, 65, 0.08);
+  padding-top: 20px;
+}
+
+.btnAction {
+  padding: 10px 20px;
+  border: 2px solid;
+  border-radius: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-primary);
+  background: white;
+}
+
+.btnApprove {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+
+.btnApprove:hover {
+  background: var(--primary-green);
+  color: white;
+}
+
+.btnEdit {
+  border-color: #2196F3;
+  color: #2196F3;
+}
+
+.btnEdit:hover {
+  background: #2196F3;
+  color: white;
+}
+
+.btnDelete {
+  border-color: #DC2626;
+  color: #DC2626;
+}
+
+.btnDelete:hover {
+  background: #DC2626;
+  color: white;
+}
+
+/* ============================================
+   MODAL
+   ============================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.modalContent {
+  background: white;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 2px solid rgba(74, 103, 65, 0.08);
+  background: linear-gradient(135deg, #FAFAF8 0%, #F5F3EF 100%);
+}
+
+.modalHeader h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  font-family: var(--font-heading);
+}
+
+.closeBtn {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 6px;
+  cursor: pointer;
+  color: var(--text-gray);
+  transition: all 0.3s ease;
+  border-radius: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.closeBtn:hover {
+  background: var(--primary-green);
+  color: white;
+  border-color: var(--primary-green);
+}
+
+.modalForm {
+  padding: 24px;
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: var(--font-primary);
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  font-size: 14px;
+  font-family: var(--font-primary);
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.1);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(0, 0, 0, 0.06);
+}
+
+.btnSecondary {
+  padding: 10px 20px;
+  background: white;
+  color: var(--text-dark);
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-primary);
+}
+
+.btnSecondary:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--text-dark);
+}
+
+.btnPrimary {
+  padding: 10px 24px;
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  border-radius: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-primary);
+  box-shadow: 0 2px 12px rgba(74, 103, 65, 0.25);
+}
+
+.btnPrimary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 103, 65, 0.35);
+}
+
+/* ============================================
+   LOADING & EMPTY STATE
+   ============================================ */
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 20px;
+  color: var(--text-gray);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--primary-green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-gray);
+  font-size: 16px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .filters {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .statValue {
+    font-size: 32px;
+  }
+
+  .filters {
+    padding: 16px;
+  }
+
+  .reviewCard {
+    padding: 16px;
+  }
+
+  .reviewProduct {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reviewHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .reviewActions {
+    flex-direction: column;
+  }
+
+  .btnAction {
+    width: 100%;
+  }
+
+  .modalContent {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .modalHeader {
+    padding: 14px 16px;
+  }
+  
+  .modalHeader h2 {
+    font-size: 18px;
+  }
+  
+  .closeBtn {
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+  }
+
+  .modalForm {
+    padding: 16px;
+  }
+  
+  .formGroup {
+    margin-bottom: 12px;
+  }
+  
+  .formGroup label {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+  
+  .formGroup input,
+  .formGroup textarea,
+  .formGroup select {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .modalActions {
+    flex-direction: column;
+    margin-top: 16px;
+    padding-top: 16px;
+    gap: 8px;
+  }
+
+  .modalActions button {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .reviewMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+

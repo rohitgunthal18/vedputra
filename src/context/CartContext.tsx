@@ -44,10 +44,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [cart, isInitialized]);
 
   const addToCart = (product: Product, quantity: number = 1) => {
+    // Prevent adding out-of-stock products
+    if (product.stock_quantity !== undefined && product.stock_quantity <= 0) {
+      alert('This product is currently out of stock.');
+      return;
+    }
+    
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.productId === product.id);
       
       if (existingItem) {
+        // Check if total quantity exceeds stock
+        const newQuantity = existingItem.quantity + quantity;
+        if (product.stock_quantity !== undefined && newQuantity > product.stock_quantity) {
+          alert(`Only ${product.stock_quantity} items available in stock. You already have ${existingItem.quantity} in your cart.`);
+          return prevCart;
+        }
+        
         // Update quantity if item already exists
         return prevCart.map((item) =>
           item.productId === product.id
@@ -55,6 +68,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             : item
         );
       } else {
+        // Check if quantity exceeds stock
+        if (product.stock_quantity !== undefined && quantity > product.stock_quantity) {
+          alert(`Only ${product.stock_quantity} items available in stock.`);
+          return prevCart;
+        }
+        
         // Add new item
         return [...prevCart, { productId: product.id, quantity, product }];
       }
@@ -71,11 +90,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     
-    setCart((prevCart) =>
-      prevCart.map((item) =>
+    setCart((prevCart) => {
+      const item = prevCart.find((item) => item.productId === productId);
+      if (item) {
+        // Check if quantity exceeds stock
+        if (item.product.stock_quantity !== undefined && quantity > item.product.stock_quantity) {
+          alert(`Only ${item.product.stock_quantity} items available in stock.`);
+          return prevCart;
+        }
+      }
+      
+      return prevCart.map((item) =>
         item.productId === productId ? { ...item, quantity } : item
-      )
-    );
+      );
+    });
   };
 
   const clearCart = () => {

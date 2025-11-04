@@ -1,10 +1,28 @@
 'use client';
 
-import { products } from '@/data/products';
+import { useState, useEffect } from 'react';
+import { Product } from '@/types';
+import { getActiveProducts } from '@/lib/api';
 import ProductCard from './ProductCard';
 import styles from './Products.module.css';
 
 const Products = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const loadProducts = async () => {
+    setLoading(true);
+    const result = await getActiveProducts();
+    if (result.success && result.products) {
+      setProducts(result.products);
+    }
+    setLoading(false);
+  };
+
   return (
     <section className={styles.products} id="products">
       <div className="container">
@@ -16,15 +34,28 @@ const Products = () => {
           </p>
         </div>
         
-        <div className={styles.productsGrid}>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
+            <p>Loading products...</p>
+          </div>
+        ) : products.length > 0 ? (
+          <>
+            <div className={styles.productsGrid}>
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
 
-        <div className={styles.sectionCta}>
-          <button className={styles.btnOutline}>VIEW ALL PRODUCTS</button>
-        </div>
+            <div className={styles.sectionCta}>
+              <button className={styles.btnOutline}>VIEW ALL PRODUCTS</button>
+            </div>
+          </>
+        ) : (
+          <div className={styles.emptyState}>
+            <p>No products available at the moment. Check back soon!</p>
+          </div>
+        )}
       </div>
     </section>
   );

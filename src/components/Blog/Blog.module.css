@@ -22,7 +22,7 @@
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  border-radius: 50px;
+  border-radius: 0;
   margin-bottom: 16px;
 }
 
@@ -75,19 +75,13 @@
 
 .imageContainer {
   height: 200px;
-  background: linear-gradient(135deg, #9CB86B 0%, #7FA64A 50%, #6B8E4E 100%);
+  background: #FAF8F5;
   position: relative;
   overflow: hidden;
 }
 
 .gradientOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(127, 166, 74, 0.9) 0%,
-    rgba(107, 142, 78, 0.8) 100%
-  );
+  display: none;
 }
 
 .category {
@@ -204,6 +198,14 @@
   box-shadow: 0 6px 20px rgba(61, 85, 54, 0.3);
 }
 
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 16px;
+  color: var(--text-gray);
+}
+
 /* ===================================
    RESPONSIVE - TABLET
    =================================== */
@@ -251,9 +253,8 @@
 
   .blogWrapper {
     margin-bottom: 40px;
-    overflow: hidden;
-    margin-left: -20px;
-    margin-right: -20px;
+    overflow: visible;
+    padding: 0 16px;
   }
 
   .blogGrid {
@@ -262,7 +263,7 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    padding: 0 20px;
+    padding: 0 4px;
     scrollbar-width: none; /* Firefox */
   }
 
@@ -356,6 +357,7 @@
 
   .blogWrapper {
     margin-bottom: 35px;
+    padding: 0 12px;
   }
 
   .blogCard {

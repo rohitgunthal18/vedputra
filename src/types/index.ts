@@ -10,7 +10,10 @@ export interface Product {
   rating: number;
   reviews: number;
   badge?: 'bestseller' | 'new' | 'organic';
-  image: StaticImageData;
+  image: StaticImageData | string; // Primary image (backward compatibility)
+  images?: (StaticImageData | string)[]; // Multiple images for slider
+  stock_quantity?: number; // For stock management
+  is_active?: boolean; // For visibility control
 }
 
 // Testimonial Types

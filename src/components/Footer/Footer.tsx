@@ -38,11 +38,11 @@ const Footer = () => {
             <div className={styles.footerColumn}>
               <h4 className={styles.columnTitle}>Quick Links</h4>
               <ul className={styles.linkList}>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Shop</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="/#home">Home</a></li>
+                <li><a href="/#products">Shop</a></li>
+                <li><a href="/#about">About Us</a></li>
+                <li><a href="/#blog">Blog</a></li>
+                <li><a href="/#contact">Contact</a></li>
               </ul>
             </div>
 
@@ -52,7 +52,7 @@ const Footer = () => {
               <ul className={styles.linkList}>
                 <li><a href="#">Shipping Info</a></li>
                 <li><a href="#">Returns</a></li>
-                <li><a href="#">Track Order</a></li>
+                <li><a href="/track-order">Track Order</a></li>
                 <li><a href="#">FAQs</a></li>
                 <li><a href="#">Privacy Policy</a></li>
               </ul>

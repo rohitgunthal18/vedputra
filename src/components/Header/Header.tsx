@@ -44,10 +44,15 @@ const Header = () => {
   };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
-    e.preventDefault();
     const section = document.getElementById(sectionId);
     if (section) {
+      // Section exists on current page, do smooth scroll
+      e.preventDefault();
       section.scrollIntoView({ behavior: 'smooth' });
+      closeMenu();
+    } else {
+      // Section doesn't exist, navigate to home page with hash
+      // Don't prevent default, let the browser handle the navigation
       closeMenu();
     }
   };
@@ -57,12 +62,12 @@ const Header = () => {
       <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
         <div className="container">
           <nav className={styles.navbar}>
-            <div className={styles.logo}>VEDPUTRA</div>
+            <Link href="/" className={styles.logo}>VEDPUTRA</Link>
             
             <ul className={`${styles.navMenu} ${isMenuOpen ? styles.active : ''}`}>
               <li>
                 <a
-                  href="#home"
+                  href="/#home"
                   className={`${styles.navLink} ${activeSection === 'home' ? styles.active : ''}`}
                   onClick={(e) => handleNavClick(e, 'home')}
                 >
@@ -71,7 +76,7 @@ const Header = () => {
               </li>
               <li>
                 <a
-                  href="#products"
+                  href="/#products"
                   className={`${styles.navLink} ${activeSection === 'products' ? styles.active : ''}`}
                   onClick={(e) => handleNavClick(e, 'products')}
                 >
@@ -80,7 +85,15 @@ const Header = () => {
               </li>
               <li>
                 <a
-                  href="#about"
+                  href="/track-order"
+                  className={styles.navLink}
+                >
+                  TRACK ORDER
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/#about"
                   className={`${styles.navLink} ${activeSection === 'about' ? styles.active : ''}`}
                   onClick={(e) => handleNavClick(e, 'about')}
                 >
@@ -89,7 +102,7 @@ const Header = () => {
               </li>
               <li>
                 <a
-                  href="#blog"
+                  href="/#blog"
                   className={`${styles.navLink} ${activeSection === 'blog' ? styles.active : ''}`}
                   onClick={(e) => handleNavClick(e, 'blog')}
                 >
@@ -98,7 +111,7 @@ const Header = () => {
               </li>
               <li>
                 <a
-                  href="#contact"
+                  href="/#contact"
                   className={`${styles.navLink} ${activeSection === 'contact' ? styles.active : ''}`}
                   onClick={(e) => handleNavClick(e, 'contact')}
                 >

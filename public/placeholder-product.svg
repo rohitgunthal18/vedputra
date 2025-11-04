@@ -1,0 +1,7 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#F5F0E8"/>
+  <circle cx="200" cy="160" r="60" fill="#4A6741" opacity="0.2"/>
+  <path d="M 150 200 Q 200 180 250 200" stroke="#4A6741" stroke-width="3" fill="none" opacity="0.3"/>
+  <text x="200" y="260" font-family="Arial, sans-serif" font-size="20" fill="#4A6741" text-anchor="middle" font-weight="600">Product Image</text>
+  <text x="200" y="290" font-family="Arial, sans-serif" font-size="14" fill="#666666" text-anchor="middle">Add in Admin Dashboard</text>
+</svg>
