@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import Script from 'next/script';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import ProductCard from '@/components/Products/ProductCard';
@@ -277,8 +278,50 @@ export default function ProductDetailPage() {
     );
   }
 
+  const productSchema = product
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: product.description,
+        image: Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.image],
+        sku: product.product_id || product.id,
+        brand: {
+          '@type': 'Brand',
+          name: 'VedPutra Organics',
+        },
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'INR',
+          price: product.price,
+          availability:
+            product.stock_quantity !== undefined && product.stock_quantity > 0
+              ? 'https://schema.org/InStock'
+              : 'https://schema.org/OutOfStock',
+          url: `https://www.vedputra.com/product/${product.product_id || product.id}`,
+        },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: product.rating,
+          reviewCount: product.reviews,
+        },
+        manufacturer: {
+          '@type': 'Organization',
+          name: 'VedPutra Organics',
+          email: 'rohitgunthal1819@gmail.com',
+        },
+      }
+    : null;
+
   return (
     <>
+      {productSchema && (
+        <Script
+          id="product-structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        />
+      )}
       <Header />
       <div className={styles.productDetailPage}>
         <div className="container">

@@ -21,6 +21,7 @@ export async function verifyAdminCredentials(email: string, password: string): P
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // CRITICAL: Include cookies to receive session cookie from server
       body: JSON.stringify({ email, password }),
     });
 

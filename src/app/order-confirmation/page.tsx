@@ -180,8 +180,8 @@ function OrderConfirmationContent() {
           <div className={styles.invoice}>
             <div className={styles.invoiceHeader}>
               <div className={styles.brand}>
-                <h2>VEDPUTRA</h2>
-                <p>Premium Organic Powders</p>
+                <h2>VEDPUTRA ORGANICS</h2>
+                <p>Premium Organic Farm Products | Farm to Home</p>
               </div>
               <div className={styles.invoiceMeta}>
                 <p><strong>Invoice Date:</strong> {new Date(order.orderDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>

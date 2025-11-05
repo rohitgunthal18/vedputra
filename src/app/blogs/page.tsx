@@ -55,7 +55,7 @@ export default function AllBlogsPage() {
         <div className={styles.header}>
         <h1 className={styles.title}>Health & Wellness Blog</h1>
         <p className={styles.subtitle}>
-          Discover expert tips, natural remedies, and wellness insights to help you live a healthier life
+          Discover VedPutra Organics tips, natural remedies, and AI-ready wellness insights curated by rohitgunthal to help you live a healthier life
         </p>
       </div>
 

@@ -24,10 +24,23 @@ export async function GET(request: NextRequest) {
   try {
     // Get token from cookie
     const token = request.cookies.get('admin_token')?.value;
-
+    
+    // Debug logging (remove in production if needed, or use proper logging service)
+    const cookieHeader = request.headers.get('cookie');
+    const hasCookie = !!cookieHeader;
+    const cookieNames = cookieHeader ? cookieHeader.split(';').map(c => c.split('=')[0].trim()) : [];
+    
     if (!token) {
+      console.log('🔍 Verify: No token found. Cookie header present:', hasCookie, 'Cookies:', cookieNames);
       return NextResponse.json(
-        { success: false, authenticated: false },
+        { 
+          success: false, 
+          authenticated: false,
+          debug: process.env.NODE_ENV === 'development' ? {
+            hasCookieHeader: hasCookie,
+            cookieNames: cookieNames
+          } : undefined
+        },
         { status: 401 }
       );
     }

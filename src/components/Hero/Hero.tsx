@@ -135,14 +135,15 @@ const Hero = () => {
         <div className={styles.heroContent}>
           {/* Text and Button Section - Left on Desktop */}
           <div className={styles.textSection}>
-            <div className={styles.badge}>100% Organic & Natural</div>
+            <div className={styles.badge}>Farm to Home</div>
             <h1 className={styles.title}>
               Premium Organic <br />
-              Powder Collection
+              Farm Products
             </h1>
             <p className={styles.description}>
-              Experience nature&apos;s finest powders, ethically sourced and meticulously 
-              crafted for your wellness journey. Pure, potent, and sustainably produced.
+              Experience VedPutra Organics farm to home powders, ethically sourced and personally supervised by rohitgunthal.
+              Every jar of moringa, beetroot, and roasted soyabean protein stays pure, potent, and sustainably produced for
+              your wellness journey across India.
             </p>
             <button className={styles.buyNowBtn} onClick={handleBuyNow}>
               BUY NOW

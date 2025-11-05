@@ -160,23 +160,81 @@ export async function PATCH(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'Invalid order ID format' }, { status: 400 });
       }
 
-      // Validate tracking number
-      if (tracking_number && typeof tracking_number !== 'string') {
-        return NextResponse.json({ success: false, error: 'Invalid tracking number format' }, { status: 400 });
+      // SECURITY: Validate tracking number
+      if (tracking_number !== null && tracking_number !== undefined) {
+        // Type check
+        if (typeof tracking_number !== 'string') {
+          return NextResponse.json({ success: false, error: 'Invalid tracking number format' }, { status: 400 });
+        }
+
+        // Trim whitespace
+        const sanitizedTracking = tracking_number.trim();
+
+        // SECURITY: Length validation (prevent DoS with extremely long strings)
+        // Typical tracking numbers are 10-50 characters, but allow up to 200 for international formats
+        if (sanitizedTracking.length > 200) {
+          console.error('❌ Tracking number too long:', sanitizedTracking.length);
+          return NextResponse.json({ success: false, error: 'Tracking number is too long (max 200 characters)' }, { status: 400 });
+        }
+
+        // SECURITY: Empty string check (after trim)
+        if (sanitizedTracking.length === 0) {
+          // Allow empty/null to clear tracking number
+          const { data, error } = await supabaseAdmin
+            .from('orders')
+            .update({ 
+              tracking_number: null,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', id)
+            .select()
+            .single();
+
+          if (error) throw error;
+          return NextResponse.json({ success: true, order: data });
+        }
+
+        // SECURITY: Basic pattern validation - allow alphanumeric, hyphens, spaces
+        // This prevents XSS if tracking number is displayed without escaping
+        // Pattern: alphanumeric, spaces, hyphens, forward slashes (common in tracking numbers)
+        if (!/^[A-Za-z0-9\s\-/]+$/.test(sanitizedTracking)) {
+          console.error('❌ Invalid tracking number characters:', sanitizedTracking);
+          return NextResponse.json({ 
+            success: false, 
+            error: 'Tracking number contains invalid characters. Only letters, numbers, spaces, hyphens, and slashes are allowed.' 
+          }, { status: 400 });
+        }
+
+        // Use sanitized value
+        const finalTrackingNumber = sanitizedTracking;
+
+        const { data, error } = await supabaseAdmin
+          .from('orders')
+          .update({ 
+            tracking_number: finalTrackingNumber,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', id)
+          .select()
+          .single();
+
+        if (error) throw error;
+        return NextResponse.json({ success: true, order: data });
+      } else {
+        // Null or undefined - clear tracking number
+        const { data, error } = await supabaseAdmin
+          .from('orders')
+          .update({ 
+            tracking_number: null,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', id)
+          .select()
+          .single();
+
+        if (error) throw error;
+        return NextResponse.json({ success: true, order: data });
       }
-
-      const { data, error } = await supabaseAdmin
-        .from('orders')
-        .update({ 
-          tracking_number: tracking_number || null,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', id)
-        .select()
-        .single();
-
-      if (error) throw error;
-      return NextResponse.json({ success: true, order: data });
     }
 
     return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });

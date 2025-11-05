@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import Script from 'next/script';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import { getBlogBySlug } from '@/lib/api';
@@ -26,6 +27,7 @@ interface Blog {
   related_product_ids: string[] | null;
   meta_title: string | null;
   meta_description: string | null;
+  updated_at?: string | null;
 }
 
 interface Product {
@@ -137,8 +139,39 @@ export default function BlogDetailPage() {
     );
   }
 
+  const blogSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: blog.meta_title || blog.title,
+    description: blog.meta_description || blog.excerpt || '',
+    image: blog.featured_image || undefined,
+    author: {
+      '@type': 'Person',
+      name: blog.author_name || 'VedPutra Organics Team',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'VedPutra Organics',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.vedputra.com/favicon.ico',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://www.vedputra.com/blog/${blog.slug}`,
+    },
+    datePublished: blog.published_at,
+    dateModified: blog.updated_at || blog.published_at,
+  };
+
   return (
     <>
+      <Script
+        id="vedputra-blog-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
       <Header />
       <div className={styles.container}>
         {/* Breadcrumb */}

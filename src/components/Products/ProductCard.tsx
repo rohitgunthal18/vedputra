@@ -82,7 +82,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <>
-      <div className={`${styles.productCard} ${isOutOfStock ? styles.outOfStockCard : ''}`}>
+      <div
+        className={`${styles.productCard} ${isOutOfStock ? styles.outOfStockCard : ''}`}
+        itemScope
+        itemType="https://schema.org/Product"
+      >
+        <meta itemProp="sku" content={product.id} />
+        <meta itemProp="brand" content="VedPutra Organics" />
+        {Array.isArray(product.images) && product.images.length > 0 && typeof product.images[0] === 'string' && (
+          <meta itemProp="image" content={product.images[0] as string} />
+        )}
+        {typeof product.image === 'string' && !Array.isArray(product.images) && (
+          <meta itemProp="image" content={product.image} />
+        )}
         {isOutOfStock && (
           <div className={styles.outOfStockBadge}>
             OUT OF STOCK
@@ -132,12 +144,25 @@ const ProductCard = ({ product }: ProductCardProps) => {
             </span>
           </div>
           <Link href={`/product/${product.id}`} className={styles.productNameLink}>
-            <h3 className={styles.productName}>{product.name}</h3>
+            <h3 className={styles.productName} itemProp="name">
+              {product.name}
+            </h3>
           </Link>
-          <p className={styles.productDescription}>{product.description}</p>
+          <p className={styles.productDescription} itemProp="description">
+            {product.description}
+          </p>
           <div className={styles.productFooter}>
             <p className={styles.productPrice}>
-              ₹{product.price} <span className={styles.productWeight}>/ {product.weight}</span>
+              <span itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                ₹<span itemProp="price">{product.price}</span>
+                <meta itemProp="priceCurrency" content="INR" />
+                <meta
+                  itemProp="availability"
+                  content={isOutOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock'}
+                />
+                <meta itemProp="url" content={`https://www.vedputra.com/product/${product.id}`} />
+              </span>{' '}
+              <span className={styles.productWeight}>/ {product.weight}</span>
             </p>
             <div className={styles.actions}>
               {isOutOfStock ? (

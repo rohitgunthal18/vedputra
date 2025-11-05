@@ -125,7 +125,7 @@ const Newsletter = () => {
                   id="phone"
                   name="phone"
                   className={styles.input}
-                  placeholder="+91 98765 43210"
+                  placeholder="+91 72186 16190"
                   value={formData.phone}
                   onChange={handleChange}
                   required
@@ -185,7 +185,7 @@ const Newsletter = () => {
                 </div>
                 <div>
                   <h4>Our Location</h4>
-                  <p>123 Organic Farm Road<br />Mumbai, Maharashtra 400001</p>
+                  <p>Shivkrupa Hights, 102, Mokarwadi<br />Pune, Maharashtra</p>
                 </div>
               </div>
 
@@ -198,7 +198,7 @@ const Newsletter = () => {
                 </div>
                 <div>
                   <h4>Email Us</h4>
-                  <p>info@vedputra.com<br />support@vedputra.com</p>
+                  <p>info@vedputra.com</p>
                 </div>
               </div>
 
@@ -210,7 +210,7 @@ const Newsletter = () => {
                 </div>
                 <div>
                   <h4>Call Us</h4>
-                  <p>+91 98765 43210<br />Mon-Sat: 9AM - 6PM</p>
+                  <p>+91 72186 16190<br />Mon-Sat: 9AM - 6PM</p>
                 </div>
               </div>
             </div>

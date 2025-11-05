@@ -100,8 +100,8 @@ export default function ShippingLabel({ order, onClose, onMarkPrinted }: Shippin
         {/* Compact Header */}
         <div className={styles.header}>
           <div className={styles.branding}>
-            <span className={styles.brandName}>VEDPUTRA</span>
-            <span className={styles.tagline}>Organic Powders</span>
+            <span className={styles.brandName}>VEDPUTRA ORGANICS</span>
+            <span className={styles.tagline}>Farm to Home</span>
           </div>
           <div className={styles.orderId}>#{order.order_id}</div>
         </div>
@@ -139,7 +139,7 @@ export default function ShippingLabel({ order, onClose, onMarkPrinted }: Shippin
 
         {/* Sender Info - Compact */}
         <div className={styles.senderInfo}>
-          <strong>FROM:</strong> VEDPUTRA, 123 Organic Valley, Mumbai - 400001 | +91 98765 43210
+          <strong>FROM:</strong> VEDPUTRA ORGANICS, Shivkrupa Hights, 102, Mokarwadi, Pune | +91 72186 16190
         </div>
 
         {/* Footer */}

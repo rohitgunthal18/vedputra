@@ -1,0 +1,47 @@
+# VedPutra Organics - Robots.txt
+# Updated: 2025
+# Contact: info@vedputra.com
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Specific directives for Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Specific directives for Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+# Allow Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+
+# Allow Google Mobile
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Disallow admin and checkout pages from indexing
+Disallow: /admin/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /track-order/
+
+# Allow blog and product pages
+Allow: /blog/
+Allow: /product/
+Allow: /blogs/
+
+# Sitemap location
+Sitemap: https://www.vedputra.com/sitemap.xml
+Sitemap: https://www.vedputra.com/product-sitemap.xml
+Sitemap: https://www.vedputra.com/blog-sitemap.xml
+
+# Host (preferred domain)
+Host: https://www.vedputra.com
+

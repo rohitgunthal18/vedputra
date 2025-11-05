@@ -178,12 +178,17 @@ export async function POST(request: NextRequest) {
     });
 
     // Set httpOnly cookie (secure, not accessible via JavaScript)
+    // Vercel production: Use secure cookies with HTTPS, sameSite 'lax' for better compatibility
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
+    
     response.cookies.set('admin_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: isProduction, // true on Vercel (HTTPS required)
+      sameSite: isProduction ? 'lax' : 'lax', // Use 'lax' for better cross-site compatibility (still secure)
       maxAge: 24 * 60 * 60, // 24 hours
-      path: '/'
+      path: '/',
+      // Don't set domain - let browser use current domain automatically
+      // This ensures it works with both vercel.app and custom domains
     });
 
     return response;

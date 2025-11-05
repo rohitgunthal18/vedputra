@@ -1,0 +1,252 @@
+.privacyPage {
+  padding: 80px 0 60px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  border-radius: 20px;
+  color: white;
+}
+
+.header h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.lastUpdated {
+  font-size: 16px;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.section {
+  margin-bottom: 48px;
+}
+
+.section h2 {
+  font-size: 32px;
+  color: #2c3e50;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #4CAF50;
+  font-weight: 700;
+}
+
+.section h3 {
+  font-size: 24px;
+  color: #34495e;
+  margin: 24px 0 16px;
+  font-weight: 600;
+}
+
+.section h4 {
+  font-size: 20px;
+  color: #4CAF50;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.section p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.section ul {
+  margin: 16px 0 24px 20px;
+  list-style: none;
+}
+
+.section ul li {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 12px;
+  padding-left: 28px;
+  position: relative;
+}
+
+.section ul li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.section a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.section a:hover {
+  color: #45a049;
+  text-decoration: underline;
+}
+
+.card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 24px;
+  border-radius: 12px;
+  margin: 20px 0;
+  border-left: 4px solid #4CAF50;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.15);
+}
+
+.card h4 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card p {
+  margin-bottom: 0;
+  font-size: 16px;
+}
+
+.contactCard {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  padding: 32px;
+  border-radius: 16px;
+  margin: 24px 0;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+}
+
+.contactCard h3 {
+  color: white;
+  margin-top: 0;
+  font-size: 28px;
+}
+
+.contactCard p {
+  color: white;
+  margin: 12px 0;
+  font-size: 17px;
+}
+
+.contactCard a {
+  color: white;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.contactCard a:hover {
+  opacity: 0.9;
+}
+
+.footer {
+  max-width: 900px;
+  margin: 48px auto 0;
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.footer p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 28px;
+  line-height: 1.8;
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btnPrimary,
+.btnSecondary {
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.btnSecondary {
+  background: white;
+  color: #4CAF50;
+  border: 2px solid #4CAF50;
+}
+
+.btnSecondary:hover {
+  background: #4CAF50;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .privacyPage {
+    padding: 60px 0 40px;
+  }
+
+  .header h1 {
+    font-size: 32px;
+  }
+
+  .content {
+    padding: 32px 24px;
+  }
+
+  .section h2 {
+    font-size: 24px;
+  }
+
+  .section h3 {
+    font-size: 20px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+  }
+}
+

@@ -1,0 +1,25 @@
+# VedPutra Organics - Security Policy
+# https://securitytxt.org/
+
+Contact: mailto:rohitgunthal1819@gmail.com
+Contact: mailto:info@vedputra.com
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en, hi
+Canonical: https://www.vedputra.com/.well-known/security.txt
+
+# Encryption
+Encryption: https://www.vedputra.com/pgp-key.txt
+
+# Policy
+Policy: https://www.vedputra.com/security-policy
+
+# Acknowledgments
+Acknowledgments: https://www.vedputra.com/security-acknowledgments
+
+# Security Notice
+# If you discover a security vulnerability in VedPutra Organics platform:
+# 1. Email details to rohitgunthal1819@gmail.com with subject: [SECURITY]
+# 2. Do not publicly disclose until we've addressed the issue
+# 3. We aim to respond within 48 hours
+# 4. We appreciate responsible disclosure and will acknowledge your contribution
+

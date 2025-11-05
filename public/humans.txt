@@ -1,0 +1,45 @@
+# humanstxt.org
+# The humans responsible for building this website
+
+/* TEAM */
+
+Founder & Owner: Rohit Gunthal
+Contact: rohitgunthal1819@gmail.com
+Location: Pune, Maharashtra, India
+
+Business Contact: info@vedputra.com
+Phone: +91-72186-16190
+
+/* SITE */
+
+Site Name: VedPutra Organics
+Standards: HTML5, CSS3, JavaScript, TypeScript, React, Next.js
+Components: Supabase, PostgreSQL
+Software: VS Code, Cursor AI, Git
+Platform: Vercel / Cloud Hosting
+Domain: www.vedputra.com
+
+/* BUSINESS */
+
+Company: VedPutra Organics
+Founded: 2021
+Industry: Organic Superfoods & Health Products
+Location: Shivkrupa Heights, 102, Mokarwadi, Pune, Maharashtra 411001, India
+Products: Moringa Powder, Beetroot Powder, Roasted Soyabean Protein
+Values: Farm to Home, Organic, Sustainable, Quality, Transparency
+
+/* THANKS */
+
+- Unsplash for temporary product images
+- Open source community for amazing tools
+- Our farmers for growing quality organic products
+- Our customers for trusting VedPutra Organics
+
+/* COPYRIGHT */
+
+© 2025 VedPutra Organics. All Rights Reserved.
+Platform owned and operated by Rohit Gunthal.
+Unauthorized copying or distribution is prohibited.
+
+Last Updated: November 2025
+
