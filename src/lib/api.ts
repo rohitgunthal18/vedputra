@@ -157,7 +157,20 @@ export async function createOrder(orderData: CreateOrderData) {
 
     // 3. Mark coupon as used if applicable
     if (orderData.couponCode) {
-      await markCouponAsUsed(orderData.couponCode, order.id);
+      console.log('🎟️ Marking coupon as used:', orderData.couponCode);
+      const couponMarkResult = await markCouponAsUsed(
+        orderData.couponCode, 
+        order.id, // Use UUID id for database foreign key
+        orderData.shippingAddress.mobile,
+        undefined // Let it auto-detect the type
+      );
+      
+      if (!couponMarkResult.success) {
+        console.error('❌ Failed to mark coupon as used:', couponMarkResult.error);
+        // Don't fail the order, but log the error for investigation
+      } else {
+        console.log('✅ Coupon marked as used successfully');
+      }
     }
 
     return { success: true, order };
@@ -636,6 +649,22 @@ export async function validateCoupon(couponCode: string, subtotal: number = 0, m
         return { success: false, valid: false, message: 'Coupon already used', type: 'promotion' };
       }
 
+      // SECURITY: Verify mobile number matches (promotion coupons are tied to mobile)
+      if (mobile && promoCoupon.mobile) {
+        const sanitizedInputMobile = mobile.replace(/\D/g, '').slice(-10);
+        const sanitizedCouponMobile = promoCoupon.mobile.replace(/\D/g, '').slice(-10);
+        
+        if (sanitizedInputMobile !== sanitizedCouponMobile) {
+          console.warn('⚠️ Mobile number mismatch for coupon:', code);
+          return { 
+            success: false, 
+            valid: false, 
+            message: 'This coupon is not valid for your mobile number', 
+            type: 'promotion' 
+          };
+        }
+      }
+
       // Calculate discount (promotion coupons are percentage based)
       const discount = Math.min((subtotal * promoCoupon.discount_percentage) / 100, promoCoupon.max_discount);
 
@@ -661,68 +690,126 @@ export async function validateCoupon(couponCode: string, subtotal: number = 0, m
 
 export async function markCouponAsUsed(couponCode: string, orderId: string, mobile?: string, couponType?: string) {
   try {
+    console.log('🎟️ markCouponAsUsed called:', { couponCode, orderId, mobile, couponType });
     const code = couponCode.toUpperCase();
     
     // If type is provided, use it directly. Otherwise, detect it
     if (!couponType) {
       // Check which type of coupon it is
-      const { data: generalCoupon } = await supabase
+      console.log('🔍 Auto-detecting coupon type...');
+      const { data: generalCoupon, error: generalCheckError } = await supabase
         .from('coupons')
         .select('id')
         .eq('code', code)
         .single();
       
+      if (generalCheckError && generalCheckError.code !== 'PGRST116') {
+        // PGRST116 = no rows found, which is expected for promotion coupons
+        console.error('Error checking general coupon:', generalCheckError);
+      }
+      
       couponType = generalCoupon ? 'general' : 'promotion';
+      console.log('✅ Detected coupon type:', couponType);
     }
     
     if (couponType === 'general') {
       // Handle general coupon
-      const { data: coupon } = await supabase
+      console.log('📋 Handling general coupon...');
+      const { data: coupon, error: couponFetchError } = await supabase
         .from('coupons')
         .select('id')
         .eq('code', code)
         .single();
       
-      if (coupon) {
-        // Increment usage count using RPC function
-        await supabase.rpc('increment_coupon_usage', { coupon_id: coupon.id });
+      if (couponFetchError || !coupon) {
+        console.error('❌ General coupon not found:', code);
+        return { success: false, error: 'Coupon not found', type: 'general' };
+      }
+      
+      // Increment usage count using RPC function
+      const { error: rpcError } = await supabase.rpc('increment_coupon_usage', { coupon_id: coupon.id });
+      
+      if (rpcError) {
+        console.error('❌ Error incrementing coupon usage:', rpcError);
+        // Continue anyway to record usage
+      }
+      
+      // Record usage if mobile is provided
+      if (mobile) {
+        const { error: usageError } = await supabase
+          .from('coupon_usage')
+          .insert({
+            coupon_id: coupon.id,
+            mobile,
+            order_id: orderId, // UUID string
+          });
         
-        // Record usage if mobile is provided
-        if (mobile) {
-          await supabase
-            .from('coupon_usage')
-            .insert({
-              coupon_id: coupon.id,
-              mobile,
-              order_id: orderId,
-            });
+        if (usageError) {
+          console.error('❌ Error recording coupon usage:', usageError);
+          console.error('❌ Usage error details:', usageError);
+          // Don't fail if usage recording fails
+        } else {
+          console.log('✅ Coupon usage recorded for mobile:', mobile);
         }
       }
       
+      console.log('✅ General coupon marked as used');
       return { success: true, type: 'general' };
     } else {
       // Handle promotion coupon
+      console.log('🎁 Handling promotion coupon...');
+      
+      // First check if coupon exists and is not already used
+      const { data: existingCoupon, error: checkError } = await supabase
+        .from('promotion_coupons')
+        .select('*')
+        .eq('coupon_code', code)
+        .single();
+      
+      if (checkError) {
+        console.error('❌ Error checking promotion coupon:', checkError);
+        return { success: false, error: `Coupon not found: ${checkError.message}`, type: 'promotion' };
+      }
+      
+      if (!existingCoupon) {
+        console.error('❌ Promotion coupon not found:', code);
+        return { success: false, error: 'Coupon not found', type: 'promotion' };
+      }
+      
+      if (existingCoupon.is_used) {
+        console.warn('⚠️ Promotion coupon already used:', code);
+        return { success: false, error: 'Coupon already used', type: 'promotion', alreadyUsed: true };
+      }
+      
+      // Mark as used
       const { data, error } = await supabase
         .from('promotion_coupons')
         .update({
           is_used: true,
           used_at: new Date().toISOString(),
-          order_id: orderId,
+          order_id: orderId, // UUID string for foreign key to orders.id
         })
         .eq('coupon_code', code)
+        .eq('is_used', false) // Additional safety check to prevent race conditions
         .select()
         .single();
 
       if (error) {
-        console.error('Error marking promotion coupon as used:', error);
-        throw error;
+        console.error('❌ Error marking promotion coupon as used:', error);
+        return { success: false, error: `Failed to mark coupon as used: ${error.message}`, type: 'promotion' };
+      }
+      
+      if (!data) {
+        console.error('❌ No coupon updated (possibly already used)');
+        return { success: false, error: 'Coupon may have been used already', type: 'promotion' };
       }
 
+      console.log('✅ Promotion coupon marked as used successfully');
       return { success: true, coupon: data, type: 'promotion' };
     }
-  } catch (error) {
-    console.error('Error in markCouponAsUsed:', error);
-    return { success: false, error };
+  } catch (error: any) {
+    console.error('❌ Error in markCouponAsUsed:', error);
+    return { success: false, error: error.message || 'Unknown error', type: null };
   }
 }
 
@@ -1070,7 +1157,19 @@ export async function createProductReview(reviewData: CreateReviewData) {
       throw insertError;
     }
 
-    console.log('Review created successfully:', review);
+    console.log('✅ Review created successfully:', review);
+
+    // Update product rating and review count
+    console.log('📊 Updating product ratings...');
+    const ratingUpdateResult = await updateProductRatingFromReviews(reviewData.product_id);
+    
+    if (!ratingUpdateResult.success) {
+      console.error('⚠️ Warning: Failed to update product rating, but review was saved');
+      // Don't fail the review creation, but log the error
+    } else {
+      console.log('✅ Product ratings updated:', ratingUpdateResult);
+    }
+
     return { success: true, review };
   } catch (error: any) {
     console.error('Error in createProductReview:', error);
@@ -1081,12 +1180,16 @@ export async function createProductReview(reviewData: CreateReviewData) {
 export async function getProductReviews(productId: string) {
   try {
     // First, check if productId is UUID or string ID
-    // If it's a UUID (contains hyphens), use it directly
-    // Otherwise, it's a string ID and we need to find the UUID
+    // UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-4-12)
+    // String ID examples: "3", "moringa-leaf-powder", "beetroot-stamina-powder"
     let productUuid = productId;
     
-    // Check if it's not a UUID (no hyphens = string ID like "3")
-    if (!productId.includes('-')) {
+    // Check if it's a valid UUID format (8-4-4-4-12 pattern)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const isUuid = uuidRegex.test(productId);
+    
+    if (!isUuid) {
+      // It's a string ID, need to look up the UUID
       const { data: productData, error: productError } = await supabase
         .from('products')
         .select('id')
@@ -1124,12 +1227,16 @@ export async function getProductReviews(productId: string) {
 export async function getReviewStats(productId: string) {
   try {
     // First, check if productId is UUID or string ID
-    // If it's a UUID (contains hyphens), use it directly
-    // Otherwise, it's a string ID and we need to find the UUID
+    // UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-4-12)
+    // String ID examples: "3", "moringa-leaf-powder", "beetroot-stamina-powder"
     let productUuid = productId;
     
-    // Check if it's not a UUID (no hyphens = string ID like "3")
-    if (!productId.includes('-')) {
+    // Check if it's a valid UUID format (8-4-4-4-12 pattern)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const isUuid = uuidRegex.test(productId);
+    
+    if (!isUuid) {
+      // It's a string ID, need to look up the UUID
       const { data: productData, error: productError } = await supabase
         .from('products')
         .select('id')
@@ -1196,6 +1303,67 @@ export async function getReviewStats(productId: string) {
     };
   } catch (error) {
     console.error('Error in getReviewStats:', error);
+    return { success: false, error };
+  }
+}
+
+// ============================================
+// UPDATE PRODUCT RATINGS (from actual reviews)
+// ============================================
+
+/**
+ * Recalculates and updates product rating and review count based on approved reviews
+ * This should be called whenever:
+ * - A new review is created
+ * - A review is approved/disapproved
+ * - A review is deleted
+ */
+export async function updateProductRatingFromReviews(productUuid: string) {
+  try {
+    console.log('📊 Updating product rating for:', productUuid);
+
+    // Get all approved reviews for this product
+    const { data: reviews, error: reviewError } = await supabase
+      .from('product_reviews')
+      .select('rating')
+      .eq('product_id', productUuid)
+      .eq('is_approved', true);
+
+    if (reviewError) {
+      console.error('❌ Error fetching reviews for rating update:', reviewError);
+      return { success: false, error: reviewError };
+    }
+
+    // Calculate average rating and count
+    const reviewCount = reviews?.length || 0;
+    let avgRating = 0;
+
+    if (reviewCount > 0) {
+      const sum = reviews.reduce((acc: number, r: any) => acc + r.rating, 0);
+      avgRating = Math.round((sum / reviewCount) * 10) / 10; // Round to 1 decimal
+    }
+
+    console.log(`📈 Calculated: ${reviewCount} reviews, avg rating ${avgRating}`);
+
+    // Update product table
+    const { error: updateError } = await supabase
+      .from('products')
+      .update({
+        rating: avgRating,
+        reviews: reviewCount,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', productUuid);
+
+    if (updateError) {
+      console.error('❌ Error updating product ratings:', updateError);
+      return { success: false, error: updateError };
+    }
+
+    console.log('✅ Product rating updated successfully');
+    return { success: true, rating: avgRating, reviewCount };
+  } catch (error) {
+    console.error('❌ Error in updateProductRatingFromReviews:', error);
     return { success: false, error };
   }
 }

@@ -17,7 +17,7 @@ Standards: HTML5, CSS3, JavaScript, TypeScript, React, Next.js
 Components: Supabase, PostgreSQL
 Software: VS Code, Cursor AI, Git
 Platform: Vercel / Cloud Hosting
-Domain: www.vedputra.com
+Domain: www.vedputra.store
 
 /* BUSINESS */
 

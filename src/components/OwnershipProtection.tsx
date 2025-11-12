@@ -65,7 +65,7 @@ export default function OwnershipProtection() {
       console.log('%c' + '═'.repeat(70), styles.border);
       
       console.log('\n%c💚 VedPutra Organics - Farm to Home Superfoods', 'color: #4CAF50; font-size: 12px;');
-      console.log('%c🌐 https://www.vedputra.com', 'color: #2196F3; font-size: 12px;');
+      console.log('%c🌐 https://www.vedputra.store', 'color: #2196F3; font-size: 12px;');
     };
 
     // Display warning immediately

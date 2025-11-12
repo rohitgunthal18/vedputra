@@ -3,7 +3,7 @@ import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import OwnershipProtection from '@/components/OwnershipProtection';
 
-const siteUrl = 'https://www.vedputra.com';
+const siteUrl = 'https://www.vedputra.store';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -78,9 +78,21 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: [
+      { url: '/favicon.png', type: 'image/png' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/favicon.png',
+    apple: [
+      { url: '/favicon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'icon',
+        url: '/favicon.png',
+      },
+    ],
   },
   other: {
     'platform-owner': 'Rohit Gunthal',
@@ -115,12 +127,72 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Structured Data for Google Sitelinks
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'VedPutra Organics',
+    alternateName: 'VedPutra',
+    url: siteUrl,
+    logo: `${siteUrl}/favicon.png`,
+    description: 'Premium organic superfoods from Maharashtra farm to your home',
+    email: 'info@vedputra.com',
+    telephone: '+91-72186-16190',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Pune',
+      addressRegion: 'Maharashtra',
+      addressCountry: 'IN',
+    },
+    sameAs: [
+      `${siteUrl}`,
+      `${siteUrl}/#products`,
+      `${siteUrl}/blogs`,
+      `${siteUrl}/#contact`,
+      `${siteUrl}/track-order`,
+      `${siteUrl}/promotion`,
+    ],
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'VedPutra Organics',
+    url: siteUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteUrl}/?s={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
   return (
     <html lang="en-IN">
       <head>
+        {/* Favicon */}
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
+        
+        {/* Structured Data for SEO Sitelinks */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        
+        {/* RSS, Sitemap, Humans */}
         <link rel="alternate" type="application/rss+xml" title="VedPutra Organics Blog" href="/rss.xml" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         <link rel="humans" type="text/plain" href="/humans.txt" />
+        
+        {/* Viewport */}
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
       <body>

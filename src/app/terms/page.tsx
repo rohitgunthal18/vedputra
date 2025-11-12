@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   ],
 };
 
-const siteUrl = 'https://www.vedputra.com';
+const siteUrl = 'https://www.vedputra.store';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -60,7 +60,7 @@ export default function TermsPage() {
               <h2>1. Agreement to Terms</h2>
               <p>
                 Welcome to <strong>VedPutra Organics</strong>. By accessing our website at{' '}
-                <a href="https://www.vedputra.com">www.vedputra.com</a> and purchasing our organic superfoods
+                <a href="https://www.vedputra.store">www.vedputra.store</a> and purchasing our organic superfoods
                 (moringa powder, beetroot powder, roasted soyabean protein), you agree to be bound by these Terms and
                 Conditions, our Privacy Policy, and all applicable laws and regulations.
               </p>
@@ -401,7 +401,7 @@ export default function TermsPage() {
                   <strong>Phone:</strong> <a href="tel:+917218616190">+91-72186-16190</a>
                 </p>
                 <p>
-                  <strong>Website:</strong> <a href="https://www.vedputra.com">www.vedputra.com</a>
+                  <strong>Website:</strong> <a href="https://www.vedputra.store">www.vedputra.store</a>
                 </p>
                 <p>
                   <strong>Customer Support Hours:</strong> Monday-Friday, 9:00 AM - 6:00 PM IST

@@ -22,7 +22,7 @@ export default async function Head({ params }: HeadProps) {
     data?.meta_keywords ||
     'VedPutra Organics blog,rohitgunthal,organic recipes,moringa tips,beetroot benefits,soyabean protein ideas';
   const image = data?.featured_image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80';
-  const canonical = `https://www.vedputra.com/blog/${data?.slug || slug}`;
+  const canonical = `https://www.vedputra.store/blog/${data?.slug || slug}`;
 
   return (
     <>

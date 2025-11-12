@@ -1,4 +1,4 @@
-const SITE_URL = 'https://www.vedputra.com';
+const SITE_URL = 'https://www.vedputra.store';
 
 export async function GET() {
   const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>

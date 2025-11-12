@@ -860,6 +860,14 @@ export async function updateReview(id: string, reviewData: UpdateReviewData) {
       .single();
 
     if (error) throw error;
+
+    // Update product ratings if rating or approval status changed
+    if ((reviewData.rating !== undefined || reviewData.is_approved !== undefined) && data?.product_id) {
+      const { updateProductRatingFromReviews } = await import('./api');
+      await updateProductRatingFromReviews(data.product_id);
+      console.log('✅ Product ratings updated after review update');
+    }
+
     return { success: true, review: data };
   } catch (error: any) {
     console.error('Error updating review:', error);
@@ -869,12 +877,35 @@ export async function updateReview(id: string, reviewData: UpdateReviewData) {
 
 export async function deleteReview(id: string) {
   try {
+    // Get product_id before deleting
+    const { data: review, error: fetchError } = await supabase
+      .from('product_reviews')
+      .select('product_id')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) {
+      console.error('Error fetching review for deletion:', fetchError);
+      throw fetchError;
+    }
+
+    const productId = review?.product_id;
+
+    // Delete the review
     const { error } = await supabase
       .from('product_reviews')
       .delete()
       .eq('id', id);
 
     if (error) throw error;
+
+    // Update product ratings
+    if (productId) {
+      const { updateProductRatingFromReviews } = await import('./api');
+      await updateProductRatingFromReviews(productId);
+      console.log('✅ Product ratings updated after review deletion');
+    }
+
     return { success: true };
   } catch (error) {
     console.error('Error deleting review:', error);
@@ -896,6 +927,14 @@ export async function toggleReviewApproval(id: string, isApproved: boolean) {
       .single();
 
     if (error) throw error;
+
+    // Update product ratings (import needed at top of file)
+    if (data?.product_id) {
+      const { updateProductRatingFromReviews } = await import('./api');
+      await updateProductRatingFromReviews(data.product_id);
+      console.log('✅ Product ratings updated after approval toggle');
+    }
+
     return { success: true, review: data };
   } catch (error) {
     console.error('Error toggling review approval:', error);

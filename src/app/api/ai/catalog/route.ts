@@ -39,7 +39,7 @@ export async function GET() {
     primaryImage: product.image_url,
     gallery: Array.isArray(product.images_json) ? product.images_json : product.image_url ? [product.image_url] : [],
     availability: product.stock_quantity !== null && product.stock_quantity > 0 ? 'InStock' : 'OutOfStock',
-    productUrl: `https://www.vedputra.com/product/${product.product_id}`,
+    productUrl: `https://www.vedputra.store/product/${product.product_id}`,
   }));
 
   return NextResponse.json(

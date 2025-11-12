@@ -298,13 +298,20 @@ export async function POST(request: NextRequest) {
     // ============================================
     
     if (validatedCouponCode) {
-      await markCouponAsUsed(
+      console.log('🎟️ Marking coupon as used:', validatedCouponCode);
+      const couponMarkResult = await markCouponAsUsed(
         validatedCouponCode,
         order.id,
         shippingAddress.mobile,
-        'general'
+        undefined // Auto-detect coupon type (general or promotion)
       );
-      console.log('✅ Coupon marked as used');
+      
+      if (!couponMarkResult.success) {
+        console.error('❌ Failed to mark coupon as used:', couponMarkResult.error);
+        // Don't fail order, but log the error
+      } else {
+        console.log('✅ Coupon marked as used successfully:', couponMarkResult.type);
+      }
     }
 
     console.log('🎉 COD order completed successfully!');

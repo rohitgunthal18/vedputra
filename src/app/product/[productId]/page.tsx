@@ -298,7 +298,7 @@ export default function ProductDetailPage() {
             product.stock_quantity !== undefined && product.stock_quantity > 0
               ? 'https://schema.org/InStock'
               : 'https://schema.org/OutOfStock',
-          url: `https://www.vedputra.com/product/${product.product_id || product.id}`,
+          url: `https://www.vedputra.store/product/${product.product_id || product.id}`,
         },
         aggregateRating: {
           '@type': 'AggregateRating',

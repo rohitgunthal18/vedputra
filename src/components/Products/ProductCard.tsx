@@ -160,7 +160,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                   itemProp="availability"
                   content={isOutOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock'}
                 />
-                <meta itemProp="url" content={`https://www.vedputra.com/product/${product.id}`} />
+                <meta itemProp="url" content={`https://www.vedputra.store/product/${product.id}`} />
               </span>{' '}
               <span className={styles.productWeight}>/ {product.weight}</span>
             </p>

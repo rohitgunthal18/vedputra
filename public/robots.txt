@@ -38,10 +38,10 @@ Allow: /product/
 Allow: /blogs/
 
 # Sitemap location
-Sitemap: https://www.vedputra.com/sitemap.xml
-Sitemap: https://www.vedputra.com/product-sitemap.xml
-Sitemap: https://www.vedputra.com/blog-sitemap.xml
+Sitemap: https://www.vedputra.store/sitemap.xml
+Sitemap: https://www.vedputra.store/product-sitemap.xml
+Sitemap: https://www.vedputra.store/blog-sitemap.xml
 
 # Host (preferred domain)
-Host: https://www.vedputra.com
+Host: https://www.vedputra.store
 

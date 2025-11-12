@@ -1,37 +1,43 @@
 .privacyPage {
-  padding: 80px 0 60px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+  padding: 100px 0 80px;
+  background-color: var(--bg-light);
   min-height: 100vh;
 }
 
 .header {
   text-align: center;
   margin-bottom: 60px;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  border-radius: 20px;
+  padding: 50px 30px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+  border-radius: 0;
   color: white;
+  box-shadow: 0 4px 20px rgba(74, 103, 65, 0.2);
 }
 
 .header h1 {
   font-size: 48px;
   margin-bottom: 16px;
   font-weight: 700;
+  color: white;
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
 }
 
 .lastUpdated {
   font-size: 16px;
   opacity: 0.95;
   font-weight: 500;
+  color: white;
 }
 
 .content {
   max-width: 900px;
   margin: 0 auto;
-  background: white;
+  background: var(--bg-white);
   padding: 60px;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .section {
@@ -40,32 +46,38 @@
 
 .section h2 {
   font-size: 32px;
-  color: #2c3e50;
+  color: var(--text-dark);
   margin-bottom: 24px;
   padding-bottom: 12px;
-  border-bottom: 3px solid #4CAF50;
+  border-bottom: 3px solid var(--primary-green);
   font-weight: 700;
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
 }
 
 .section h3 {
   font-size: 24px;
-  color: #34495e;
+  color: var(--text-dark);
   margin: 24px 0 16px;
   font-weight: 600;
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
 }
 
 .section h4 {
   font-size: 20px;
-  color: #4CAF50;
+  color: var(--primary-green);
   margin-bottom: 12px;
   font-weight: 600;
+  font-family: var(--font-heading);
 }
 
 .section p {
   font-size: 17px;
   line-height: 1.8;
-  color: #555;
+  color: var(--text-gray);
   margin-bottom: 16px;
+  font-family: var(--font-primary);
 }
 
 .section ul {
@@ -73,48 +85,70 @@
   list-style: none;
 }
 
+.section ol {
+  margin: 16px 0 24px 20px;
+  padding-left: 10px;
+}
+
+.section ol li {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-gray);
+  margin-bottom: 16px;
+  padding-left: 12px;
+  font-family: var(--font-primary);
+}
+
+.section ol li strong {
+  color: var(--primary-green);
+  font-weight: 600;
+}
+
 .section ul li {
   font-size: 17px;
   line-height: 1.8;
-  color: #555;
+  color: var(--text-gray);
   margin-bottom: 12px;
   padding-left: 28px;
   position: relative;
+  font-family: var(--font-primary);
 }
 
 .section ul li::before {
   content: '✓';
   position: absolute;
   left: 0;
-  color: #4CAF50;
+  color: var(--primary-green);
   font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .section a {
-  color: #4CAF50;
+  color: var(--primary-green);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.3s ease;
+  transition: color var(--transition-fast);
+  border-bottom: 1px solid transparent;
 }
 
 .section a:hover {
-  color: #45a049;
-  text-decoration: underline;
+  color: var(--primary-dark);
+  border-bottom: 1px solid var(--primary-dark);
 }
 
 .card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(to bottom, #FAFAF8 0%, #F5F0E8 100%);
   padding: 24px;
-  border-radius: 12px;
+  border-radius: 0;
   margin: 20px 0;
-  border-left: 4px solid #4CAF50;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 4px solid var(--primary-green);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.15);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(74, 103, 65, 0.12);
 }
 
 .card h4 {
@@ -122,42 +156,60 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--primary-green);
 }
 
 .card p {
   margin-bottom: 0;
   font-size: 16px;
+  line-height: 1.7;
+}
+
+.card ul {
+  margin-top: 12px;
+  margin-bottom: 0;
 }
 
 .contactCard {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
   color: white;
-  padding: 32px;
-  border-radius: 16px;
+  padding: 36px;
+  border-radius: 0;
   margin: 24px 0;
-  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 20px rgba(74, 103, 65, 0.25);
+  border: 2px solid var(--primary-green);
 }
 
 .contactCard h3 {
   color: white;
   margin-top: 0;
   font-size: 28px;
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
 }
 
 .contactCard p {
   color: white;
   margin: 12px 0;
   font-size: 17px;
+  opacity: 0.98;
+}
+
+.contactCard strong {
+  font-weight: 600;
+  opacity: 1;
 }
 
 .contactCard a {
   color: white;
   text-decoration: underline;
   font-weight: 600;
+  border-bottom: none;
 }
 
 .contactCard a:hover {
   opacity: 0.9;
+  color: white;
 }
 
 .footer {
@@ -165,14 +217,15 @@
   margin: 48px auto 0;
   text-align: center;
   padding: 40px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  background: var(--bg-white);
+  border-radius: 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .footer p {
   font-size: 18px;
-  color: #555;
+  color: var(--text-gray);
   margin-bottom: 28px;
   line-height: 1.8;
 }
@@ -186,67 +239,199 @@
 
 .btnPrimary,
 .btnSecondary {
-  padding: 16px 32px;
-  border-radius: 50px;
-  font-size: 17px;
+  padding: 16px 36px;
+  border-radius: 0;
+  font-size: 16px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   display: inline-block;
+  font-family: var(--font-primary);
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btnPrimary {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  border: 2px solid var(--primary-green);
 }
 
 .btnPrimary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 6px 20px rgba(74, 103, 65, 0.3);
+  background: var(--primary-dark);
 }
 
 .btnSecondary {
-  background: white;
-  color: #4CAF50;
-  border: 2px solid #4CAF50;
+  background: var(--bg-white);
+  color: var(--primary-green);
+  border: 2px solid var(--primary-green);
 }
 
 .btnSecondary:hover {
-  background: #4CAF50;
+  background: var(--primary-green);
   color: white;
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 103, 65, 0.3);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .privacyPage {
-    padding: 60px 0 40px;
+    padding: 80px 0 60px;
+  }
+
+  .header {
+    padding: 40px 24px;
+    margin-bottom: 40px;
   }
 
   .header h1 {
-    font-size: 32px;
+    font-size: 36px;
+  }
+
+  .lastUpdated {
+    font-size: 14px;
   }
 
   .content {
+    padding: 40px 28px;
+  }
+
+  .section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+
+  .section h3 {
+    font-size: 22px;
+    margin: 20px 0 14px;
+  }
+
+  .section h4 {
+    font-size: 18px;
+  }
+
+  .section p,
+  .section ul li,
+  .section ol li {
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .contactCard {
+    padding: 28px;
+  }
+
+  .contactCard h3 {
+    font-size: 24px;
+  }
+
+  .contactCard p {
+    font-size: 15px;
+  }
+
+  .footer {
     padding: 32px 24px;
+    margin-top: 40px;
+  }
+
+  .footer p {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+    padding: 14px 28px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacyPage {
+    padding: 70px 0 50px;
+  }
+
+  .header {
+    padding: 32px 20px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .lastUpdated {
+    font-size: 13px;
+  }
+
+  .content {
+    padding: 32px 20px;
+  }
+
+  .section {
+    margin-bottom: 36px;
   }
 
   .section h2 {
     font-size: 24px;
+    margin-bottom: 18px;
   }
 
   .section h3 {
     font-size: 20px;
   }
 
-  .buttons {
-    flex-direction: column;
+  .section h4 {
+    font-size: 17px;
+  }
+
+  .section p,
+  .section ul li,
+  .section ol li {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .card {
+    padding: 18px;
+    margin: 16px 0;
+  }
+
+  .contactCard {
+    padding: 24px;
+  }
+
+  .contactCard h3 {
+    font-size: 22px;
+  }
+
+  .contactCard p {
+    font-size: 14px;
+  }
+
+  .footer {
+    padding: 28px 20px;
+  }
+
+  .footer p {
+    font-size: 15px;
   }
 
   .btnPrimary,
   .btnSecondary {
-    width: 100%;
+    padding: 12px 24px;
+    font-size: 14px;
   }
 }
-

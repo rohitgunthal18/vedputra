@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
 };
 
-const siteUrl = 'https://www.vedputra.com';
+const siteUrl = 'https://www.vedputra.store';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -67,7 +67,7 @@ export default function PrivacyPolicyPage() {
                 Welcome to <strong>VedPutra Organics</strong>. We are committed to protecting your personal information
                 and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard
                 your information when you visit our website{' '}
-                <a href="https://www.vedputra.com">www.vedputra.com</a> and purchase our organic superfood products
+                <a href="https://www.vedputra.store">www.vedputra.store</a> and purchase our organic superfood products
                 including moringa powder, beetroot powder, and roasted soyabean protein.
               </p>
               <p>
@@ -333,7 +333,7 @@ export default function PrivacyPolicyPage() {
                 </p>
                 <p>
                   <strong>Website:</strong>{' '}
-                  <a href="https://www.vedputra.com">www.vedputra.com</a>
+                  <a href="https://www.vedputra.store">www.vedputra.store</a>
                 </p>
                 <p>
                   <strong>Response Time:</strong> Within 48 hours for privacy-related inquiries

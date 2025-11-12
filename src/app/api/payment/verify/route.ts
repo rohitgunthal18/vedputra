@@ -389,12 +389,20 @@ export async function POST(request: NextRequest) {
       
       // Mark coupon as used
       if (paymentSession.coupon_code) {
-        await markCouponAsUsed(
+        console.log('🎟️ Marking coupon as used:', paymentSession.coupon_code);
+        const couponMarkResult = await markCouponAsUsed(
           paymentSession.coupon_code,
           result.order.id,
           paymentSession.customer_phone,
-          'general'
+          undefined // Auto-detect coupon type (general or promotion)
         );
+        
+        if (!couponMarkResult.success) {
+          console.error('❌ Failed to mark coupon as used:', couponMarkResult.error);
+          // Don't fail order, but log the error
+        } else {
+          console.log('✅ Coupon marked as used successfully:', couponMarkResult.type);
+        }
       }
       
       // Update payment session status

@@ -22,7 +22,7 @@ export default async function Head({ params }: HeadProps) {
     data?.meta_keywords ||
     'VedPutra Organics,rohitgunthal,organic superfoods,moringa powder,beetroot powder,roasted soyabean protein';
   const image = data?.image_url || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80';
-  const canonical = `https://www.vedputra.com/product/${data?.product_id || productId}`;
+  const canonical = `https://www.vedputra.store/product/${data?.product_id || productId}`;
 
   return (
     <>

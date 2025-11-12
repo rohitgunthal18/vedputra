@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 
-const SITE_URL = 'https://www.vedputra.com';
+const SITE_URL = 'https://www.vedputra.store';
 
 function escapeXml(unsafe: string): string {
   return unsafe

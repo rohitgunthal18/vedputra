@@ -434,44 +434,73 @@
 .descriptionTab {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
+}
+
+.section {
+  padding: 20px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: 0;
+  margin-bottom: 16px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
 }
 
 .section h2 {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--text-dark);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary-green);
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
 }
 
 .section p {
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.8;
   color: var(--text-gray);
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .benefitsList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .benefitsList li {
-  padding-left: 24px;
+  padding: 12px 12px 12px 40px;
   position: relative;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--text-gray);
+  background: var(--bg-cream);
+  border-left: 3px solid var(--primary-green);
+  transition: all 0.2s ease;
+}
+
+.benefitsList li:hover {
+  background: #f0f0f0;
+  transform: translateX(4px);
 }
 
 .benefitsList li::before {
   content: '✓';
   position: absolute;
-  left: 0;
+  left: 12px;
   color: var(--primary-green);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 18px;
+  line-height: 1;
 }
 
 /* ============================================
@@ -1167,6 +1196,37 @@
   .blogsGrid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  
+  .section {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .section h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+  }
+  
+  .section p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  
+  .benefitsList {
+    gap: 10px;
+  }
+  
+  .benefitsList li {
+    padding: 10px 10px 10px 36px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .benefitsList li::before {
+    left: 10px;
+    font-size: 16px;
   }
   
   .limitedContent {

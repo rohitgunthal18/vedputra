@@ -154,12 +154,12 @@ export default function BlogDetailPage() {
       name: 'VedPutra Organics',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.vedputra.com/favicon.ico',
+        url: 'https://www.vedputra.store/favicon.png',
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://www.vedputra.com/blog/${blog.slug}`,
+      '@id': `https://www.vedputra.store/blog/${blog.slug}`,
     },
     datePublished: blog.published_at,
     dateModified: blog.updated_at || blog.published_at,

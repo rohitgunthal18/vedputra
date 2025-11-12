@@ -479,8 +479,8 @@
 /* Small Mobile */
 @media (max-width: 480px) {
   .productImageWrapper {
-    height: 220px;
-    padding: 14px;
+    height: 260px;
+    padding: 16px;
   }
 
   .productInfo {
@@ -573,8 +573,8 @@
 /* Extra Small Mobile */
 @media (max-width: 380px) {
   .productImageWrapper {
-    height: 200px;
-    padding: 12px;
+    height: 240px;
+    padding: 14px;
   }
 
   .productInfo {

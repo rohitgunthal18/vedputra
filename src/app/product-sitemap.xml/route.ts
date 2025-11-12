@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 
-const SITE_URL = 'https://www.vedputra.com';
+const SITE_URL = 'https://www.vedputra.store';
 
 export async function GET() {
   const { data: products } = await supabase

@@ -4,7 +4,7 @@ export default function Head() {
     'Explore VedPutra Organics blogs by rohitgunthal covering moringa recipes, beetroot benefits, roasted soyabean protein ideas, and AI-ready shopping insights.';
   const keywords =
     'VedPutra Organics blog,rohitgunthal wellness tips,moringa recipes,beetroot powder benefits,soyabean protein ideas,AI shopping seo';
-  const canonical = 'https://www.vedputra.com/blogs';
+  const canonical = 'https://www.vedputra.store/blogs';
   const image = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80';
 
   return (

@@ -11,7 +11,7 @@ import Newsletter from '@/components/Newsletter/Newsletter';
 import Footer from '@/components/Footer/Footer';
 import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 
-const siteUrl = 'https://www.vedputra.com';
+const siteUrl = 'https://www.vedputra.store';
 
 const organizationSchema = {
   '@context': 'https://schema.org',
