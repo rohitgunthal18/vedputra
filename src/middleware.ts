@@ -2,6 +2,27 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  const url = request.nextUrl.clone();
+  const hostname = request.headers.get('host') || '';
+  let needsRedirect = false;
+  
+  // Force HTTPS redirect
+  if (url.protocol === 'http:') {
+    url.protocol = 'https:';
+    needsRedirect = true;
+  }
+  
+  // Force www redirect (only for vedputra.store domain)
+  if (hostname === 'vedputra.store') {
+    url.hostname = 'www.vedputra.store';
+    needsRedirect = true;
+  }
+  
+  // If any redirect is needed, perform it
+  if (needsRedirect) {
+    return NextResponse.redirect(url);
+  }
+
   const response = NextResponse.next();
 
   // Set CSP header for all routes

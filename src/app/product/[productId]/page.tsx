@@ -278,39 +278,81 @@ export default function ProductDetailPage() {
     );
   }
 
+  // Calculate priceValidUntil (1 year from now)
+  const priceValidUntil = new Date();
+  priceValidUntil.setFullYear(priceValidUntil.getFullYear() + 1);
+  const priceValidUntilISO = priceValidUntil.toISOString().split('T')[0];
+
+  // Format reviews for structured data (limit to 10 most recent)
+  const reviewSchema = reviews && reviews.length > 0
+    ? reviews.slice(0, 10).map((review) => ({
+        '@type': 'Review',
+        author: {
+          '@type': 'Person',
+          name: review.reviewer_name,
+        },
+        datePublished: review.published_at || review.created_at,
+        reviewBody: review.review_text,
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: review.rating,
+          bestRating: '5',
+          worstRating: '1',
+        },
+        ...(review.title && { name: review.title }),
+      }))
+    : [];
+
+  // Build product schema, removing undefined fields
   const productSchema = product
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'Product',
-        name: product.name,
-        description: product.description,
-        image: Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.image],
-        sku: product.product_id || product.id,
-        brand: {
-          '@type': 'Brand',
-          name: 'VedPutra Organics',
-        },
-        offers: {
-          '@type': 'Offer',
-          priceCurrency: 'INR',
-          price: product.price,
-          availability:
-            product.stock_quantity !== undefined && product.stock_quantity > 0
-              ? 'https://schema.org/InStock'
-              : 'https://schema.org/OutOfStock',
-          url: `https://www.vedputra.store/product/${product.product_id || product.id}`,
-        },
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: product.rating,
-          reviewCount: product.reviews,
-        },
-        manufacturer: {
-          '@type': 'Organization',
-          name: 'VedPutra Organics',
-          email: 'rohitgunthal1819@gmail.com',
-        },
-      }
+    ? (() => {
+        const schema: any = {
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: product.name,
+          description: product.description,
+          image: Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.image],
+          sku: product.product_id || product.id,
+          brand: {
+            '@type': 'Brand',
+            name: 'VedPutra Organics',
+          },
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'INR',
+            price: product.price.toString(),
+            availability:
+              product.stock_quantity !== undefined && product.stock_quantity > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock',
+            url: `https://www.vedputra.store/product/${product.product_id || product.id}`,
+            priceValidUntil: priceValidUntilISO,
+          },
+          manufacturer: {
+            '@type': 'Organization',
+            name: 'VedPutra Organics',
+            email: 'rohitgunthal1819@gmail.com',
+          },
+        };
+
+        // Add aggregateRating only if reviews exist
+        if (product.reviews > 0) {
+          schema.aggregateRating = {
+            '@type': 'AggregateRating',
+            ratingValue: product.rating.toString(),
+            reviewCount: product.reviews.toString(),
+            bestRating: '5',
+            worstRating: '1',
+          };
+        }
+
+        // Add review array only if reviews exist
+        if (reviewSchema.length > 0) {
+          schema.review = reviewSchema;
+        }
+
+        return schema;
+      })()
     : null;
 
   return (

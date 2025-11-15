@@ -100,6 +100,11 @@ const websiteSchema = {
   },
 };
 
+// Calculate priceValidUntil (1 year from now) for homepage products
+const priceValidUntil = new Date();
+priceValidUntil.setFullYear(priceValidUntil.getFullYear() + 1);
+const priceValidUntilISO = priceValidUntil.toISOString().split('T')[0];
+
 const productCollectionSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -127,6 +132,14 @@ const productCollectionSchema = {
           priceCurrency: 'INR',
           availability: 'https://schema.org/InStock',
           url: `${siteUrl}/product/moringa-leaf-powder`,
+          priceValidUntil: priceValidUntilISO,
+        },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '4.8',
+          reviewCount: '45',
+          bestRating: '5',
+          worstRating: '1',
         },
       },
     },
@@ -150,6 +163,14 @@ const productCollectionSchema = {
           priceCurrency: 'INR',
           availability: 'https://schema.org/InStock',
           url: `${siteUrl}/product/beetroot-stamina-powder`,
+          priceValidUntil: priceValidUntilISO,
+        },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '4.7',
+          reviewCount: '38',
+          bestRating: '5',
+          worstRating: '1',
         },
       },
     },
@@ -173,6 +194,14 @@ const productCollectionSchema = {
           priceCurrency: 'INR',
           availability: 'https://schema.org/InStock',
           url: `${siteUrl}/product/roasted-soyabean-protein`,
+          priceValidUntil: priceValidUntilISO,
+        },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '4.9',
+          reviewCount: '44',
+          bestRating: '5',
+          worstRating: '1',
         },
       },
     },
